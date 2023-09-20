@@ -1,0 +1,7 @@
+.background {
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    background-image: url('/landing-background.jpg');
+    background-size: cover;
+}
