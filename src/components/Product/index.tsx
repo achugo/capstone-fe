@@ -39,6 +39,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => (
 
 interface SearchResultsProps {
   results: Array<SearchResultType>;
+  search: string;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, search }) => (

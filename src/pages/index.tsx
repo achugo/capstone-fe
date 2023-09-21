@@ -7,7 +7,6 @@ import Header from "../components/Header";
 import { API_BASE_URL } from "../constants";
 import PageLayout from "@/containers/layout/PageLayout";
 
-
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const [search, setSearch] = useState("");
@@ -30,7 +29,8 @@ export default function Home() {
     }
   };
 
-  const submitSearchQuery = () => {
+  const submitSearchQuery = (e) => {
+    e.preventDefault();
     if (search.length >= 3) {
       fetchResults();
     }

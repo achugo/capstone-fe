@@ -2,20 +2,26 @@ import React from "react";
 
 interface SearchInputProps {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
-  onSubmit: React.MouseEventHandler<HTMLButtonElement>;
+  onSubmit: React.MouseEventHandler<HTMLButtonElement> &
+    React.FormEventHandler<HTMLFormElement>;
   value: string;
 }
 
 const SearchInput = ({ onChange, value, onSubmit }: SearchInputProps) => {
   return (
-    <div className="mx-auto mt-56 text-white">
+    <div className="mx-auto max-w-2xl  mt-56 text-white">
       <div className="w-full">
         <h1 className="text-center font-semibold text-4xl sm:text-7xl ">
           <span className="text-primary">GROCERY</span>
           <span className="text-white">GURU</span>
         </h1>
       </div>
-      <form className="w-full mt-2 ms-2">
+      <form
+        className="w-full mt-2 ms-2"
+        onSubmit={(e) => {
+          onSubmit(e);
+        }}
+      >
         <div className="mb-3">
           <div className="relative mb-4 flex w-full flex-wrap items-stretch focus:scale-110">
             <input
