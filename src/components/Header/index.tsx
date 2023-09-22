@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const Header = () => {
   const router = useRouter();
-  const handleDropDown = (ev) =>{
+  const handleDropDown = (ev: any) =>{
       const dropDown = document.getElementById('dropDownMenu');
       const menuStatus = ev.target.classList.contains('close');
       const formDiv = document.getElementById('formDiv');
