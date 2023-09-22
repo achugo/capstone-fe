@@ -62,8 +62,8 @@ Vite is a fast build tool and development server for modern web development. It 
 # JavaScript
 JavaScript is a widely-used programming language that enables dynamic, interactive behavior on web pages. It's essential for client-side scripting and creating dynamic web applications.
 
-## Project Structure
-
+# Project Structure
+```
 ├── src/                  # Source code
 │   ├── assets/           # Static assets (images, fonts, etc.)
 │   ├── components/       # Reusable UI components
@@ -86,8 +86,8 @@ JavaScript is a widely-used programming language that enables dynamic, interacti
 ├── tsconfig.json         # Config file to specify TypeScript settings and options
 ├── tsconfig.node.json    # Compiler options for ESNext module
 ├── vite.config.ts        # Vite configuration
-
-## Contributors
+```
+# Contributors
 
 1. Achugo, Chukwuemeka Ugonna
 2. Pireva, Fortan
