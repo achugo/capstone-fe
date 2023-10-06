@@ -1,11 +1,46 @@
 import Header from "../components/Header";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import PageLayout from "@/containers/layout/PageLayout";
+import axios from "axios";
+import { toast } from "react-toastify";
+import Loader from "@/components/loader/Loader";
 type Props = {};
 
 const Login = ({}: Props) => {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const apiUrl = 'http://51.158.96.160:8000/api/registration/signup/';
+
+  const handleSubmit = async (e: any) => {
+    setLoading(true)
+    e.preventDefault();
+
+    const headers = {
+      'Content-Type': 'application/json', // Set the Content-Type header
+      // Add any other headers if needed
+    };
+
+    try {
+      const response = await axios.post(apiUrl, { email, password });
+
+      if (response) {
+        setLoading(false)
+      }
+      // Handle success
+      console.log('Registration successful:', response.data);
+    } catch (error) {
+      setLoading(false)
+      // Handle error
+      console.error('Registration failed:', error);
+            //@ts-ignore
+      toast.error(error?.message);
+    }
+  };
+
   return (
     <PageLayout>
       <Header />
@@ -28,7 +63,7 @@ const Login = ({}: Props) => {
                   </p>
                 </div>
               </div>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="relative mb-6" data-te-input-wrapper-init>
                   <input
                     type="text"
@@ -50,6 +85,7 @@ const Login = ({}: Props) => {
                     className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                     id="exampleFormControlInput33"
                     placeholder="Password"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <label
                     htmlFor="exampleFormControlInput33"
@@ -67,7 +103,7 @@ const Login = ({}: Props) => {
                       value=""
                       id="exampleCheck3"
                       checked
-                      onChange={() => {}}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <label
                       className="inline-block pl-[0.15rem] hover:cursor-pointer"
@@ -91,7 +127,7 @@ const Login = ({}: Props) => {
                   data-te-ripple-init
                   data-te-ripple-color="light"
                 >
-                  Login
+                  {loading ? <Loader /> : 'Login'}
                 </button>
 
                 <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">

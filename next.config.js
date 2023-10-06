@@ -12,6 +12,13 @@ const nextConfig = {
       "offer-images.api.edeka",
       "www.aldi-nord.de",
     ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'coop.ch',
+        port: '',
+      },
+    ],
   },
 };
 

@@ -1,14 +1,44 @@
 import Header from "../components/Header";
-import React from "react";
+import React, { useState } from "react";
+import axios from 'axios';
 import PageLayout from "@/containers/layout/PageLayout";
+import Loader from "@/components/loader/Loader";
+import { toast } from "react-toastify";
 
 type Props = {};
 
 const Register = ({}: Props) => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const apiUrl = 'http://51.158.96.160:8000/api/registration/signup/';
+
+  const handleSubmit = async (e: any) => {
+    setLoading(true)
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(apiUrl, { email, password });
+
+      if (response) {
+        setLoading(false)
+      }
+      // Handle success
+      console.log('Registration successful:', response.data);
+    } catch (error) {
+      setLoading(false)
+      // Handle error
+      console.error('Registration failed:', error);
+            //@ts-ignore
+      toast.error(error?.message);
+    }
+  };
   return (
     <PageLayout>
       <Header />
-      <section className="h-screen w-full overflow-y-hidden sm:py-2">
+      <section className="flex items-center h-screen w-full overflow-y-hidden sm:py-2">
         <div className="container py-5 px-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mx-5 sm:m-0 mt-0 sm:transition-none opacity-100 transition-all ease-in duration-500" id="formDiv">
               <div className="flex flex-col justify-center hidden sm:inline-block">
@@ -27,7 +57,7 @@ const Register = ({}: Props) => {
                       </p>
                     </div>
                   </div>
-                  <form>
+                  <form onSubmit={handleSubmit}>
                   <div className="relative mb-4" data-te-input-wrapper-init>
                     <input
                       type="text"
@@ -63,6 +93,8 @@ const Register = ({}: Props) => {
                       className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                       id="exampleFormControlInput3"
                       placeholder="Email address"
+                      onChange={(e) => setEmail(e.target.value)}
+                    
                     />
                     <label
                       htmlFor="exampleFormControlInput3"
@@ -78,6 +110,7 @@ const Register = ({}: Props) => {
                       className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                       id="exampleFormControlInput33"
                       placeholder="Password"
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <label
                       htmlFor="exampleFormControlInput33"
@@ -94,7 +127,6 @@ const Register = ({}: Props) => {
                         type="checkbox"
                         value=""
                         id="exampleCheck3"
-                        checked
                       />
                       <label
                         className="inline-block pl-[0.15rem] hover:cursor-pointer text-sm sm:text-lg"
@@ -114,11 +146,13 @@ const Register = ({}: Props) => {
 
                   <button
                     type="submit"
-                    className="inline-block bg-primary w-full rounded bg-primary px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    className="justify-center flex inline-block bg-primary w-full rounded bg-primary px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                     data-te-ripple-init
                     data-te-ripple-color="light"
+                    
                   >
-                    Register
+                    {loading ? <Loader /> : 'Register'}
+                    
                   </button>
                 </form>
               </div>

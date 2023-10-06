@@ -9,6 +9,7 @@ import PageLayout from "@/containers/layout/PageLayout";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
 import { is } from "cypress/types/bluebird";
+import { responseData } from "../mocks/res";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
@@ -21,14 +22,21 @@ export default function Home() {
     try {
       setLoading(true);
       //localhost:8080/items/search?name=m&page=0&size=5
-      const response = await fetch(
-        `${API_BASE_URL}search?name=${search}&page=${page}&size=${size}`
-      );
-      let result = await response.json();
+      // const response = await fetch(
+      //   `${API_BASE_URL}search?name=${search}&page=${page}&size=${size}`
+      // );
+      // let result = await response.json();
 
-      if (result) {
-        setSearchResults(result);
-      }
+      let result = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(responseData);
+        }, 1000); // Simulate a 1-second delay
+      });
+      return result.then((data: any) => {
+        setSearchResults(data);
+      });
+
+
     } catch (error) {
       toast.error("Couldn't get any results");
       console.log("error", error);
