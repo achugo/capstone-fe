@@ -9,7 +9,7 @@ import PageLayout from "@/containers/layout/PageLayout";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
 import { is } from "cypress/types/bluebird";
-import { responseData, responseData2 } from "./res";
+import { responseData } from "./res";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
@@ -29,7 +29,7 @@ export default function Home() {
 
       let result = new Promise((resolve) => {
         setTimeout(() => {
-          resolve(responseData2);
+          resolve(responseData);
         }, 1000); // Simulate a 1-second delay
       });
       return result.then((data: any) => {
