@@ -9,7 +9,7 @@ import PageLayout from "@/containers/layout/PageLayout";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
 import { is } from "cypress/types/bluebird";
-import { responseData } from "./res";
+import { responseData } from "../mocks/res";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
