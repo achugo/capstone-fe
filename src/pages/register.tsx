@@ -12,29 +12,44 @@ const Register = ({}: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [passwordError, setPasswordError] = useState<string>(''); // State for password error
 
-  const apiUrl = 'http://51.158.96.160:8000/api/registration/signup/';
+  const apiUrl = 'http://51.158.96.160:8000/api/registration/signup';
+
+  const isPasswordValid = (password: string) => {
+    // Check if the password meets the criteria (e.g., at least 10 characters with a combination of letters and numbers)
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{10,}$/;
+    return passwordRegex.test(password);
+  };
 
   const handleSubmit = async (e: any) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
+
+    // Validate the password
+    if (!isPasswordValid(password)) {
+      setLoading(false);
+      setPasswordError('Password must be at least 10 characters with a combination of letters and numbers.');
+      return; // Prevent further processing
+    }
 
     try {
       const response = await axios.post(apiUrl, { email, password });
 
       if (response) {
-        setLoading(false)
+        setLoading(false);
       }
       // Handle success
       console.log('Registration successful:', response.data);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       // Handle error
       console.error('Registration failed:', error);
-            //@ts-ignore
+      //@ts-ignore
       toast.error(error?.message);
     }
   };
+
   return (
     <PageLayout>
       <Header />
@@ -76,7 +91,7 @@ const Register = ({}: Props) => {
                   <div className="relative mb-4" data-te-input-wrapper-init>
                     <input
                       type="text"
-                      className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                      className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity:100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                       id="firstName"
                       placeholder="Last Name"
                     />
@@ -120,6 +135,10 @@ const Register = ({}: Props) => {
                     </label>
                   </div>
 
+                  {passwordError && (
+                    <div className="text-red-500 text-sm mb-4">{passwordError}</div>
+                  )}
+
                   <div className="mb-4 flex items-center justify-between flex-wrap">
                     <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
                       <input
@@ -149,10 +168,8 @@ const Register = ({}: Props) => {
                     className="justify-center flex inline-block bg-primary w-full rounded bg-primary px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                     data-te-ripple-init
                     data-te-ripple-color="light"
-                    
                   >
                     {loading ? <Loader /> : 'Register'}
-                    
                   </button>
                 </form>
               </div>
