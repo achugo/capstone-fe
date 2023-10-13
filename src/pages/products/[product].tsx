@@ -112,13 +112,13 @@ const ProductPage = (result: SearchResultType) => {
           <Image
             className="w-96 h-auto"
             src={selectedFood.imageUrl}
-            alt={selectedFood.name}
+            alt={selectedFood.title}
             width={300}
             height={300}
           />
         </div>
         <div className="w-full md:w-1/2 p-4">
-          <h2 className="text-3xl font-semibold mb-4">{selectedFood.name}</h2>
+          <h2 className="text-3xl font-semibold mb-4">{selectedFood.title}</h2>
           <p className="mb-4">{selectedFood.description}</p>
           <p className="mb-4 text-xl font-semibold">${selectedFood.price}</p>
           <button
