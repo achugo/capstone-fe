@@ -44,8 +44,10 @@ const ProductDetailModal = ({
         <div className="text-lg flex justify-center">PRODUCT INFORMATION</div>
         <div>
           <div
-            className="w-[26em] mx-auto my-4"
+            className="w-[26em] mx-auto my-4 cursor-pointer"
             style={{ minHeight: "22em" }}
+            onClick={() => window.open(result?.articleLink
+                , '_blank')}
 
           >
             <img
