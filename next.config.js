@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    unoptimized: true,
     domains: [
       "picsum.photos",
       "encrypted-tbn0.gstatic.com",
@@ -14,9 +15,9 @@ const nextConfig = {
     ],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'coop.ch',
-        port: '',
+        protocol: "https",
+        hostname: "coop.ch",
+        port: "",
       },
     ],
   },
