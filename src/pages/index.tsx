@@ -26,7 +26,6 @@ export default function Home() {
         `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`,
         {
           method: "GET",
-          mode: "no-cors", // Set the mode to 'no-cors'
           headers: {
             "Content-Type": "application/json", // Your request headers here
           },
