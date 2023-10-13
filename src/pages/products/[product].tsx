@@ -182,28 +182,28 @@ const ProductPage = (result: SearchResultType) => {
   );
 };
 
-// This function gets called at build time
-export async function getServerSideProps(context: any) {
-  const { product: id } = context.params;
-  const { supermarket } = context.query;
-  // Call an external API endpoint to get posts
-  console.log(id, process.env["HOST"]);
-  console.log(supermarket);
-  const response = await fetch(
-    `http://${process.env["HOST"]}/${supermarket}-products.json`
-  );
+// // This function gets called at build time
+// export async function getServerSideProps(context: any) {
+//   const { product: id } = context.params;
+//   const { supermarket } = context.query;
+//   // Call an external API endpoint to get posts
+//   console.log(id, process.env["HOST"]);
+//   console.log(supermarket);
+//   const response = await fetch(
+//     `http://${process.env["HOST"]}/${supermarket}-products.json`
+//   );
 
-  const products = await response.json();
-  console.log(products);
-  let product = products.find((p: SearchResultType) => p.id == id);
+//   const products = await response.json();
+//   console.log(products);
+//   let product = products.find((p: SearchResultType) => p.id == id);
 
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
-  return {
-    props: {
-      ...product,
-      supermarket: supermarket,
-    },
-  };
-}
+//   // We'll pre-render only these paths at build time.
+//   // { fallback: false } means other routes should 404.
+//   return {
+//     props: {
+//       ...product,
+//       supermarket: supermarket,
+//     },
+//   };
+// }
 export default ProductPage;
