@@ -23,7 +23,14 @@ export default function Home() {
       setLoading(true);
 
       const response = await fetch(
-        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
+        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`,
+        {
+          method: "GET",
+          mode: "no-cors", // Set the mode to 'no-cors'
+          headers: {
+            "Content-Type": "application/json", // Your request headers here
+          },
+        }
       );
       let result = await response.json();
 
@@ -49,7 +56,7 @@ export default function Home() {
   const onSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     setSearch(e.target.value);
-    setCurrentSearch("")
+    setCurrentSearch("");
   };
 
   return (
@@ -79,8 +86,7 @@ export default function Home() {
 
           {searchResults.length === 0 && currentSearch && (
             <h1 className="text-xl text-center font-semibold mb-6 text-dark">
-              No search result for {" "}
-              {currentSearch}
+              No search result for {currentSearch}
             </h1>
           )}
         </div>
