@@ -27,14 +27,14 @@ export default function PageLayout({ children }: Props) {
   const isLoginOrRegister =
     router.pathname.includes("login") || router.pathname.includes("register");
   const loginRegisterMainStyle = "flex min-h-screen flex-col items-center justify-start md:px-24 bg-black bg-opacity-50 h-screen";
-  const userMainStyle = "min-h-screen bg-black bg-opacity-50 h-screen";
+  const userMainStyle = "bg-black bg-opacity-50 h-3/4";
   return (
     <div
       className={`${
         isLoginOrRegister
           ? "bg-[url('/registration.jpg')]"
           : "bg-[url('/landing-background.jpg')]"
-      } bg-fixed bg-cover bg-black	 bg-no-repeat	 bg-center min-h-full h-screen	`}
+      } bg-fixed bg-cover bg-black	 bg-no-repeat	 bg-center min-h-min h-3/4`}
       // className="bg-black"
     >
       <main

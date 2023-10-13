@@ -5,11 +5,10 @@ import { SearchResultType } from "../data/interfaces/isearchresult";
 import Header from "../components/Header";
 
 import { API_BASE_URL } from "../constants";
-import PageLayout from "@/containers/layout/PageLayout";
+import SearchLayout from "@/containers/layout/SearchLayout";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
 import { is } from "cypress/types/bluebird";
-import { responseData } from "../mocks/res";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
@@ -21,22 +20,15 @@ export default function Home() {
   const fetchResults = async () => {
     try {
       setLoading(true);
-      //localhost:8080/items/search?name=m&page=0&size=5
-      // const response = await fetch(
-      //   `${API_BASE_URL}search?name=${search}&page=${page}&size=${size}`
-      // );
-      // let result = await response.json();
 
-      let result = new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(responseData);
-        }, 1000); // Simulate a 1-second delay
-      });
-      return result.then((data: any) => {
-        setSearchResults(data);
-      });
+      const response = await fetch(
+        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
+      );
+      let result = await response.json();
 
-
+      if (result) {
+        setSearchResults(result);
+      }
     } catch (error) {
       toast.error("Couldn't get any results");
       console.log("error", error);
@@ -47,7 +39,7 @@ export default function Home() {
 
   const submitSearchQuery = (e: any) => {
     e.preventDefault();
-    if (search.length >= 3) {
+    if (search.length >= 2) {
       fetchResults();
     }
   };
@@ -57,29 +49,31 @@ export default function Home() {
     setSearch(e.target.value);
   };
   return (
-    <PageLayout>
-      <Header />
+    <div>
+      <SearchLayout>
+        <Header />
 
-      <SearchInput
-        onChange={onSearchInputChange}
-        value={search}
-        onSubmit={submitSearchQuery}
-      />
+        <SearchInput
+          onChange={onSearchInputChange}
+          value={search}
+          onSubmit={submitSearchQuery}
+        />
+      </SearchLayout>
 
-      {loading && (
-        <div className="flex justify-center">
-          <ReactLoading type={"spin"} color="#fff" />
+      <div className="bg-[#F5F3F0]">
+        <div className="max-w-5xl pt-16 mx-auto">
+          {loading && (
+            <div className="flex justify-center">
+              <ReactLoading type={"spin"} color="#ecc229" />
+            </div>
+          )}
+          {searchResults.length > 0 && (
+            <>
+              <SearchResults results={searchResults} search={search} />
+            </>
+          )}
         </div>
-      )}
-      {searchResults.length > 0 && (
-        <>
-          <h1 className="text-3xl font-semibold mb-6 text-white">
-            Search Results
-          </h1>
-
-          <SearchResults results={searchResults} search={search} />
-        </>
-      )}
-    </PageLayout>
+      </div>
+    </div>
   );
 }
