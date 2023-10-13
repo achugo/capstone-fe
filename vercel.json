@@ -1,7 +1,8 @@
-{
-    "rewrites": [
+
+  {
+    "redirects": [
       {
-        "source": "/:path",
+        "source": "/(.*)",
         "destination": "http://capstone-1vkc65xnz-chequebaseio.vercel.app/"
       }
     ]
