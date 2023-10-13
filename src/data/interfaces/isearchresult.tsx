@@ -1,12 +1,12 @@
 export interface SearchResultType {
   id: number;
   price: number;
-  name: string;
+  title: string;
   description: string;
   imageUrl: string;
   shop?: string;
   date: string;
-  address: string;
+  location: string;
   weight?: string;
   article_link?: string;
 }
