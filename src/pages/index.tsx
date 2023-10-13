@@ -1,5 +1,4 @@
 import SearchInput from "../components/inputs/searchinput";
-import SearchResults from "../components/Product";
 import React, { useEffect, useState } from "react";
 import { SearchResultType } from "../data/interfaces/isearchresult";
 import Header from "../components/Header";
@@ -9,13 +8,15 @@ import SearchLayout from "@/containers/layout/SearchLayout";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
 import { is } from "cypress/types/bluebird";
+import SearchResults from "@/components/results/SearchResult";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState<string>("");
+  const [currentSearch, setCurrentSearch] = useState<string>("");
+  const [page, setPage] = useState<Number>(0);
+  const [size, setSize] = useState<Number>(10);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchResults = async () => {
     try {
@@ -42,14 +43,17 @@ export default function Home() {
     if (search.length >= 2) {
       fetchResults();
     }
+    setCurrentSearch(search);
   };
 
   const onSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     setSearch(e.target.value);
+    setCurrentSearch("")
   };
+
   return (
-    <div>
+    <div className="bg-[#F5F3F0]">
       <SearchLayout>
         <Header />
 
@@ -69,8 +73,15 @@ export default function Home() {
           )}
           {searchResults.length > 0 && (
             <>
-              <SearchResults results={searchResults} search={search} />
+              <SearchResults results={searchResults} search={currentSearch} />
             </>
+          )}
+
+          {searchResults.length === 0 && currentSearch && (
+            <h1 className="text-xl text-center font-semibold mb-6 text-dark">
+              No search result for {" "}
+              {currentSearch}
+            </h1>
           )}
         </div>
       </div>
