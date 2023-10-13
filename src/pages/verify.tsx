@@ -5,7 +5,7 @@ import PageLayout from "@/containers/layout/PageLayout";
 import Loader from "@/components/loader/Loader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "@/constants";
-import { router } from "next/client";
+import { useRouter } from "next/router";
 
 type Props = {};
 
@@ -14,6 +14,7 @@ const VerifyAccount = ({}: Props) => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
+  const router = useRouter()
   
 
   useEffect(() => {

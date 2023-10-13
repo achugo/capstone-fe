@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { router } from "next/client";
+import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
 
 export default function UserDashboard() {
   const [userInfo, setUserInfo] = useState<any>({});
+  const router = useRouter()
   useEffect(() => {
     // Perform localStorage action
     const item = localStorage.getItem("userData");
