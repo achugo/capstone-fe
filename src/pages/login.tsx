@@ -5,38 +5,43 @@ import PageLayout from "@/containers/layout/PageLayout";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Loader from "@/components/loader/Loader";
+import { API_BASE_URL } from "@/constants";
 type Props = {};
 
 const Login = ({}: Props) => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const apiUrl = 'http://51.158.96.160:8000/api/registration/signup/';
-
   const handleSubmit = async (e: any) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
 
     const headers = {
-      'Content-Type': 'application/json', // Set the Content-Type header
+      "Content-Type": "application/json", // Set the Content-Type header
       // Add any other headers if needed
     };
 
     try {
-      const response = await axios.post(apiUrl, { email, password });
+      const response = await axios.post(`${API_BASE_URL}registration/signin/`, {
+        email,
+        password,
+      });
 
-      if (response) {
-        setLoading(false)
+      if (response.data.token) {
+        setLoading(false);
+        localStorage.setItem("token", response.data?.token);
+        toast.success("login successful");
+        router.push("/user");
       }
       // Handle success
-      console.log('Registration successful:', response.data);
+      console.log("sign successful:", response.data);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       // Handle error
-      console.error('Registration failed:', error);
-            //@ts-ignore
+      console.error("Registration failed:", error);
+      //@ts-ignore
       toast.error(error?.message);
     }
   };
@@ -46,7 +51,10 @@ const Login = ({}: Props) => {
       <Header />
       <section className="h-screen  w-full overflow-y-hidden sm:py-2">
         <div className="container  px-2 py-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mx-5 sm:m-0 mt-0 sm:transition-none opacity-100 transition-all ease-in duration-500" id="formDiv">
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 gap-1 mx-5 sm:m-0 mt-0 sm:transition-none opacity-100 transition-all ease-in duration-500"
+            id="formDiv"
+          >
             <div className="flex flex-col justify-center hidden sm:inline-block">
               <img
                 src="/illustration.png"
@@ -57,7 +65,9 @@ const Login = ({}: Props) => {
             <div className="sm:w-full bg-white shadow-xl rounded-3xl p-5 sm:w-11/12">
               <div className="flex items-center rounded-b-lg lg:rounded-r-lg lg:rounded-bl-none">
                 <div className="p3-6 w-full">
-                  <h4 className="mb-4 text-lg text-center sm:text-3xl font-semibold ">SIGN IN</h4>
+                  <h4 className="mb-4 text-lg text-center sm:text-3xl font-semibold ">
+                    SIGN IN
+                  </h4>
                   <p className="text-xs sm:text-sm mb-2 text-center">
                     Please login to access customized search experience
                   </p>
@@ -70,6 +80,7 @@ const Login = ({}: Props) => {
                     className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                     id="exampleFormControlInput3"
                     placeholder="Email address"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <label
                     htmlFor="exampleFormControlInput3"
@@ -85,7 +96,7 @@ const Login = ({}: Props) => {
                     className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                     id="exampleFormControlInput33"
                     placeholder="Password"
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <label
                     htmlFor="exampleFormControlInput33"
@@ -103,7 +114,6 @@ const Login = ({}: Props) => {
                       value=""
                       id="exampleCheck3"
                       checked
-                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <label
                       className="inline-block pl-[0.15rem] hover:cursor-pointer"
@@ -127,7 +137,7 @@ const Login = ({}: Props) => {
                   data-te-ripple-init
                   data-te-ripple-color="light"
                 >
-                  {loading ? <Loader /> : 'Login'}
+                  {loading ? <Loader /> : "Login"}
                 </button>
 
                 <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300">
@@ -135,25 +145,6 @@ const Login = ({}: Props) => {
                     OR
                   </p>
                 </div>
-
-                <a
-                  className="mb-3 flex w-full items-center justify-center rounded bg-primary px-7 pb-2.5 pt-3 text-center text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                  style={{ backgroundColor: "#3b5998" }}
-                  href="#!"
-                  role="button"
-                  data-te-ripple-init
-                  data-te-ripple-color="light"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mr-2 h-3.5 w-3.5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-                  </svg>
-                  Continue with Facebook
-                </a>
               </form>
             </div>
           </div>

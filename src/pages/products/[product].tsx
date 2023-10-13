@@ -129,7 +129,7 @@ const ProductPage = (result: SearchResultType) => {
           </button>
           <div className="mt-2">
             <a
-              href={selectedFood.article_link}
+              href={selectedFood.articleLink}
               target="_blank"
               className="text-blue-500  hover:text-blue-300"
             >

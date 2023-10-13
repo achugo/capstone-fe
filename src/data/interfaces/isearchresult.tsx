@@ -8,5 +8,5 @@ export interface SearchResultType {
   date: string;
   location: string;
   weight?: string;
-  article_link?: string;
+  articleLink?: string;
 }
