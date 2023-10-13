@@ -111,7 +111,7 @@ const ProductPage = (result: SearchResultType) => {
         <div className="w-full md:w-1/2 flex justify-center">
           <Image
             className="w-96 h-auto"
-            src={selectedFood.image}
+            src={selectedFood.imageUrl}
             alt={selectedFood.name}
             width={300}
             height={300}
