@@ -1,7 +1,7 @@
 {
     "rewrites": [
       {
-        "source": "https://capstone-1vkc65xnz-chequebaseio.vercel.app/",
+        "source": "http://capstone-1vkc65xnz-chequebaseio.vercel.app/:path*",
         "destination": "http://capstone-1vkc65xnz-chequebaseio.vercel.app/"
       }
     ]
