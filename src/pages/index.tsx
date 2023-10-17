@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
 import { is } from "cypress/types/bluebird";
 import SearchResults from "@/components/results/SearchResult";
+import Product from "@/components/Product";
+import {responseData} from "@/mocks/res";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
