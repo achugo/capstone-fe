@@ -13,20 +13,20 @@ interface SearchResultProps {
 }
 
 
-    const Product: React.FC<SearchResultProps> = ({result}) => {
-    const[isLiked,setIsLiked] = useState(false)
+const Product: React.FC<SearchResultProps> = ({result}) => {
+    const [isLiked, setIsLiked] = useState(false)
+
     enum ToolTip {
         liked = 'Add to WishList',
         disliked = 'Remove from WishList'
+    }
 
-        }
     const [showModal, setShowModal] = useState<boolean>(false);
-    const handleBasket = (ev:any)=>{
-        if(!isLiked){
-           setIsLiked(true)
+    const handleBasket = (ev: any) => {
+        if (!isLiked) {
+            setIsLiked(true)
             // todo -- Handle request to backend
-        }
-        else{
+        } else {
             setIsLiked(false)
             // todo -- Handle request to backend
         }
@@ -78,17 +78,16 @@ interface SearchResultProps {
                                     € {result.price}
                                 </h1>
                             </div>
-                                <span className="mt-9">{"result.weight"}</span>
+                            <span className="mt-9">{"result.weight"}</span>
                             <div className="mt-7 mx-2 cursor-pointer"
                                  onClick={handleBasket}
                             >
-                                 <span className="mt-1 tooltip" data-tip={isLiked ?  ToolTip.disliked :ToolTip.liked} >
-                                     {isLiked ? <BsFillHeartFill className="text-2xl text-amber-400" /> :
-                                      <BsHeart className="text-2xl"/>
+                                 <span className="mt-1 tooltip" data-tip={isLiked ? ToolTip.disliked : ToolTip.liked}>
+                                     {isLiked ? <BsFillHeartFill className="text-2xl text-amber-400"/> :
+                                         <BsHeart className="text-2xl"/>
                                      }
                                  </span>
                             </div>
-
                         </div>
                     </div>
                 </div>
