@@ -15,7 +15,7 @@ interface ProductDetailModalProps {
 const MapLink = ({destinationAddress}: any) => {
     const location = localStorage.getItem("location") ?? "";
 
-    console.log("userLocation", JSON.parse(location));
+    // console.log("userLocation", JSON.parse(location));
     // Create a function to open Google Maps with the destination address.
     const openGoogleMaps = () => {
         const userCordinates = JSON.parse(location); // You can replace this with the user's location if needed.
