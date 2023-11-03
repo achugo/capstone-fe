@@ -4,8 +4,10 @@ import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
+import { toast } from "react-toastify";
 import { FaBeer } from "react-icons/fa";
 import { BsFillHeartFill, BsHeart } from "react-icons/bs";
+import axios from "axios";
 
 interface SearchResultProps {
   result: SearchResultType;
@@ -36,17 +38,56 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     return null;
   }
 
+  console.log('result', result);
+  
   enum ToolTip {
     liked = "Add to WishList",
     disliked = "Remove from WishList",
   }
 
+  const addToBasket = async (product_id: number) => {
+    // Prevent default form submission if necessary, depending on how this function is used.
+    
+    // Assuming the token is stored in the localStorage after login
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      toast.error("No authentication token found. Please log in.");
+      return;
+    }
+  
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`, // Add the Authorization header with the Bearer token
+    };
+  
+    try {
+      // Using a template literal to insert the product_id into the URL
+      const response = await axios.post(`https://api.grocery-guru.de/api/basket/${product_id}/`, {}, { headers });
+  
+      // Assuming the API responds with some data to indicate success
+      toast.success(`${result.title} added to basket`);
+      setIsLiked(true);
+      console.log("Response data:", response.data);
+      
+      // Redirect or handle the successful response here
+    } catch (error) {
+      // Handle error
+      console.error("Request failed:", error);
+      //@ts-ignore
+      toast.error(error?.response?.data?.message || error?.message);
+    }
+  };
+
+  
+  
+
   const handleBasket = (ev: any) => {
     if (!isLiked) {
-      setIsLiked(true);
+      addToBasket(result?.id)
       // todo -- Handle request to backend
     } else {
-      setIsLiked(false);
+      // setIsLiked(false);
       // todo -- Handle request to backend
     }
   };
