@@ -4,6 +4,7 @@ import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
+import { BsEyeFill} from "react-icons/bs";
 
 interface SearchResultProps {
   result: SearchResultType;
@@ -83,7 +84,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
               {result.title}
             </h3>
 
-            <div className="h-[100px]">
+            <div className="h-[80px]">
               <h4>{truncate(result.description, { length: 100 })}</h4>
             </div>
 
@@ -94,12 +95,14 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 € {result.price}
               </h1>
               <span className="mt-2">{result.weight}</span>
+              
+              
             </div>
 
-            <div className="productViews">
-              <h4>
-                views {productView}</h4>
+            <div className="productViews mb-2" style={{ bottom: "0", }}>
+            <p className="flex"><BsEyeFill className="text-[#fe7d00] text-2xl"/>&nbsp;{productView}</p>
             </div>
+
           </div>
         </div>
       </div>
