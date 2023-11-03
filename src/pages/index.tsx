@@ -10,7 +10,7 @@ import ReactLoading from "react-loading";
 import { is } from "cypress/types/bluebird";
 import SearchResults from "@/components/results/SearchResult";
 import Product from "@/components/Product";
-import {responseData} from "@/mocks/res";
+import {responseData} from "../mocks/res";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
@@ -20,6 +20,10 @@ export default function Home() {
   const [size, setSize] = useState<Number>(10);
   const [loading, setLoading] = useState<boolean>(false);
 
+useEffect( ()=>{
+  setSearchResults(responseData)
+},[])
+  
   const fetchResults = async () => {
     try {
       setLoading(true);
