@@ -4,6 +4,7 @@ import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
+import {ProductTracker} from "@/product_views_tracker/productTracker";
 import { toast } from "react-toastify";
 import { FaBeer } from "react-icons/fa";
 import { BsFillHeartFill, BsHeart } from "react-icons/bs";
@@ -14,9 +15,16 @@ interface SearchResultProps {
 }
 
 const Product: React.FC<SearchResultProps> = ({ result }) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const [productView, setProductView] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const handleProductClick = (ev: any) =>{
+    setShowModal(true)
+    const productTracker = new ProductTracker();
+    const userIP = '128.0.0.1';
+    productTracker.trackProductView(userIP,result.id)
+
+
+  }
+
 
   function setCookie(name: string, value: number) {
     document.cookie = `${name}=${value};path=/`;
@@ -113,6 +121,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     setShowModal(true);
   };
 
+
   return (
     <>
       <ProductDetailModal
@@ -125,7 +134,10 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 cursor-pointer"
         style={{ minWidth: "350px" }}
       >
-        <div className="bg-white shadow-md rounded p-6 cursor-auto hover:scale-110 hover:transition-transform h-[30em]">
+        <div
+          onClick={handleProductClick}
+          className="bg-white shadow-md rounded p-6 cursor-auto hover:scale-110 hover:transition-transform h-[30em]"
+        >
           <div>
             <div
               className="w-[10em] mx-auto"
@@ -146,31 +158,14 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
               <h4>{truncate(result.description, { length: 100 })}</h4>
             </div>
 
+            <p className="mt-2 bold text-orange-700">Shop: {result.shop}</p>
+
             <div className="flex justify-between mt-2">
-              <div onClick={showModalHandler} className="cursor-pointer">
-                <p className="mt-2 bold text-orange-700">Shop: {result.shop}</p>
-                <h1 className="w-[150px] text-2xl font-bold text-[#fe7d00]">
-                  € {result.price}
-                </h1>
-              </div>
-              <span className="mt-9">{result.weight}</span>
-            
-              <div className="mt-7 mx-2 cursor-pointer" onClick={handleBasket}>
-                <span
-                  className="mt-1 tooltip"
-                  data-tip={isLiked ? ToolTip.disliked : ToolTip.liked}
-                >
-                  {isLiked ? (
-                    <BsFillHeartFill className="text-2xl text-amber-400" />
-                  ) : (
-                    <BsHeart className="text-2xl" />
-                  )}
-                </span>
-              </div>
+              <h1 className="w-[150px] text-2xl font-bold text-[#fe7d00]">
+                € {result.price}
+              </h1>
+              <span className="mt-2">{result.weight}</span>
             </div>
-            <div className="productViews">
-                <h4>views {productView}</h4>
-              </div>
           </div>
         </div>
       </div>
