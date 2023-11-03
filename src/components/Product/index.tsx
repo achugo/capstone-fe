@@ -109,9 +109,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 </h1>
               </div>
               <span className="mt-9">{result.weight}</span>
-              <div className="productViews">
-                <h4>views {productView}</h4>
-              </div>
+            
               <div className="mt-7 mx-2 cursor-pointer" onClick={handleBasket}>
                 <span
                   className="mt-1 tooltip"
@@ -125,6 +123,9 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 </span>
               </div>
             </div>
+            <div className="productViews">
+                <h4>views {productView}</h4>
+              </div>
           </div>
         </div>
       </div>
