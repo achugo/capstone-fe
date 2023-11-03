@@ -11,7 +11,7 @@ interface SearchResultProps {
 
 const Product: React.FC<SearchResultProps> = ({ result }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-
+  const [productView, setProductView] = useState<number>(0);
   function setCookie(name:string, value:number) {
   
     document.cookie = `${name}=${value};path=/`;
@@ -33,7 +33,9 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     return null;
   }
 
+  
 
+   
   const showModalHandler = ()=> {
     const viewedProduct = getCookie(result.id);
   if (viewedProduct) {
@@ -41,8 +43,10 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     } else {
       setCookie("viewProduct"+result.id , result.id)
       console.log(`User has not yet viewed the product with ID: ${result.id} incrementation is required.`);
-      // replace with API call to increment on the backend
-      
+      setProductView(productView + 1);
+      // You can also replace the above line with an API call to increment the count on the backend
+    
+          
   }
           setShowModal(true)
   }
@@ -90,6 +94,11 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 € {result.price}
               </h1>
               <span className="mt-2">{result.weight}</span>
+            </div>
+
+            <div className="productViews">
+              <h4>
+                views {productView}</h4>
             </div>
           </div>
         </div>
