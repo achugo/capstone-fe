@@ -1,10 +1,12 @@
-import React, {SetStateAction} from "react";
+import React, {SetStateAction, useEffect, useState} from "react";
 import "react-responsive-modal/styles.css";
 import {Modal} from "react-responsive-modal";
 import {FaMapMarker} from "react-icons/fa";
 import {SearchResultType} from "@/data/interfaces/isearchresult";
 import Image from "next/image";
 import SimilarItems from "@/components/Product/SimilarItems";
+import {API_BASE_URL} from "@/constants";
+import {toast} from "react-toastify";
 
 interface ProductDetailModalProps {
     result: SearchResultType;
@@ -38,8 +40,34 @@ const ProductDetailModal = ({
                                 setShowModal,
                             }: ProductDetailModalProps) => {
     const onCloseModal = () => setShowModal(false);
-    console.log("result", result);
+    const [similarItems, setSimilarItems] = useState([])
+    console.log(result)
+    const fetchSimilarItems = async () => {
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}items/similar/?item_id=${result.id}`,
+                {
+                    method: "GET",
+                    mode: "cors", // Set the mode to 'no-cors'
+                    headers: {
+                        "Content-Type": "application/json", // Your request headers here
+                    },
+                }
+            );
+            let data = await response.json();
 
+            if (data) {
+                setSimilarItems(data);
+            }
+        } catch (error) {
+            toast.error("Couldn't get any results");
+            console.log("error", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchSimilarItems();
+    }, []);
     return (
         <Modal open={showModal} onClose={onCloseModal} center>
             <div className="min-h-[40em] min-w-[40em]">
@@ -99,7 +127,7 @@ const ProductDetailModal = ({
                     </div>
                 </div>
                 <hr className="border"/>
-                <SimilarItems />
+                {similarItems && <SimilarItems similarItems={similarItems} />}
             </div>
         </Modal>
     );
