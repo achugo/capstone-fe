@@ -264,7 +264,7 @@ export default function UserDashboard() {
                   WISHLIST
                 </span>
               </div>
-              <h2 className="text-center font-bold text-xl">100</h2>
+              <h2 className="text-center font-bold text-xl">{basket?.length}</h2>
             </div>
             <div className=" w-[160px] rounded-xl bg-amber-400 shadow my-1">
               <div className="flex text-center pt-2  ps-2  hover:cursor-pointer duration-500">
@@ -281,7 +281,7 @@ export default function UserDashboard() {
                   DISCOUNTS
                 </span>
               </div>
-              <h2 className="text-center font-bold text-xl">100</h2>
+              <h2 className="text-center font-bold text-xl">{basket?.length}</h2>
             </div>
             <div className=" w-[160px] rounded-xl bg-amber-400 shadow my-1">
               <div className="flex text-center pt-2  ps-2  hover:cursor-pointer duration-500">
@@ -314,7 +314,7 @@ export default function UserDashboard() {
                     Item
                   </th>
                   <th className="px-3 py-3 text-xs font-normal text-left text-black uppercase align-middle">
-                    Link
+                    Description
                   </th>
                   <th className="px-3 py-3 text-xs font-normal text-left text-black uppercase align-middle">
                     Discount
@@ -341,7 +341,7 @@ export default function UserDashboard() {
                      </span>
                    </td>
                    <td className="px-3 py-4 text-gray-500 ">
-                     <a href="www.aldi.com/milk">www.aldi.com/milk</a>
+                     <a href="www.aldi.com/milk">{item?.description}</a>
                    </td>
                    <td className="w-20 px-3 py-2 text-gray-500 ">12.99</td>
                  </tr>
