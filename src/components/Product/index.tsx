@@ -4,6 +4,7 @@ import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
+import {ProductTracker} from "@/product_views_tracker/productTracker";
 
 interface SearchResultProps {
   result: SearchResultType;
@@ -11,7 +12,14 @@ interface SearchResultProps {
 
 const Product: React.FC<SearchResultProps> = ({ result }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const handleProductClick = (ev: any) =>{
+    setShowModal(true)
+    const productTracker = new ProductTracker();
+    const userIP = '12897.0.0.1';
+    productTracker.trackProductView(userIP,result.id)
 
+
+  }
 
   return (
     <>
@@ -26,7 +34,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
         style={{ minWidth: "350px" }}
       >
         <div
-          onClick={() => setShowModal(true)}
+          onClick={handleProductClick}
           className="bg-white shadow-md rounded p-6 cursor-pointer hover:scale-110 hover:transition-transform h-[30em]"
         >
           <div>
