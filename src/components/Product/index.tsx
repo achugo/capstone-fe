@@ -15,7 +15,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
   const handleProductClick = (ev: any) =>{
     setShowModal(true)
     const productTracker = new ProductTracker();
-    const userIP = '12897.0.0.1';
+    const userIP = '128.0.0.1';
     productTracker.trackProductView(userIP,result.id)
 
 
