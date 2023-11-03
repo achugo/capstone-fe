@@ -4,52 +4,69 @@ import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
+import { FaBeer } from "react-icons/fa";
+import { BsFillHeartFill, BsHeart } from "react-icons/bs";
 
 interface SearchResultProps {
   result: SearchResultType;
 }
 
 const Product: React.FC<SearchResultProps> = ({ result }) => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [productView, setProductView] = useState<number>(0);
-  function setCookie(name:string, value:number) {
-  
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  function setCookie(name: string, value: number) {
     document.cookie = `${name}=${value};path=/`;
   }
-  
-  function getCookie(value:number) {
-    const cookies = document.cookie.split(';');
-  
+
+  function getCookie(value: number) {
+    const cookies = document.cookie.split(";");
+
     for (let i = 0; i < cookies.length; i++) {
       let cookie = cookies[i].trim();
-      
+
       if (cookie.includes(`=${value}`)) {
         // Extract the name (key) of the cookie from the string
-        const cookieName = cookie.split('=')[0];
+        const cookieName = cookie.split("=")[0];
         return cookieName;
       }
     }
-    
+
     return null;
   }
 
-  
+  enum ToolTip {
+    liked = "Add to WishList",
+    disliked = "Remove from WishList",
+  }
 
-   
-  const showModalHandler = ()=> {
-    const viewedProduct = getCookie(result.id);
-  if (viewedProduct) {
-    console.log(`User has already viewed product with ID: ${result.id} no increment required`);
+  const handleBasket = (ev: any) => {
+    if (!isLiked) {
+      setIsLiked(true);
+      // todo -- Handle request to backend
     } else {
-      setCookie("viewProduct"+result.id , result.id)
-      console.log(`User has not yet viewed the product with ID: ${result.id} incrementation is required.`);
+      setIsLiked(false);
+      // todo -- Handle request to backend
+    }
+  };
+
+  const showModalHandler = () => {
+    const viewedProduct = getCookie(result.id);
+    if (viewedProduct) {
+      console.log(
+        `User has already viewed product with ID: ${result.id} no increment required`
+      );
+    } else {
+      setCookie("viewProduct" + result.id, result.id);
+      console.log(
+        `User has not yet viewed the product with ID: ${result.id} incrementation is required.`
+      );
       setProductView(productView + 1);
       // You can also replace the above line with an API call to increment the count on the backend
-    
-          
-  }
-          setShowModal(true)
-  }
+    }
+    setShowModal(true);
+  };
 
   return (
     <>
@@ -63,10 +80,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 cursor-pointer"
         style={{ minWidth: "350px" }}
       >
-        <div
-          onClick={showModalHandler}
-          className="bg-white shadow-md rounded p-6 cursor-pointer hover:scale-110 hover:transition-transform h-[30em]"
-        >
+        <div className="bg-white shadow-md rounded p-6 cursor-auto hover:scale-110 hover:transition-transform h-[30em]">
           <div>
             <div
               className="w-[10em] mx-auto"
@@ -87,19 +101,31 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
               <h4>{truncate(result.description, { length: 100 })}</h4>
             </div>
 
-            <p className="mt-2 bold text-orange-700">Shop: {result.shop}</p>
-
             <div className="flex justify-between mt-2">
-              <h1 className="w-[150px] text-2xl font-bold text-[#fe7d00]">
-                € {result.price}
-              </h1>
-              <span className="mt-2">{result.weight}</span>
+              <div onClick={showModalHandler} className="cursor-pointer">
+                <p className="mt-2 bold text-orange-700">Shop: {result.shop}</p>
+                <h1 className="w-[150px] text-2xl font-bold text-[#fe7d00]">
+                  € {result.price}
+                </h1>
+              </div>
+              <span className="mt-9">{result.weight}</span>
+            
+              <div className="mt-7 mx-2 cursor-pointer" onClick={handleBasket}>
+                <span
+                  className="mt-1 tooltip"
+                  data-tip={isLiked ? ToolTip.disliked : ToolTip.liked}
+                >
+                  {isLiked ? (
+                    <BsFillHeartFill className="text-2xl text-amber-400" />
+                  ) : (
+                    <BsHeart className="text-2xl" />
+                  )}
+                </span>
+              </div>
             </div>
-
             <div className="productViews">
-              <h4>
-                views {productView}</h4>
-            </div>
+                <h4>views {productView}</h4>
+              </div>
           </div>
         </div>
       </div>
