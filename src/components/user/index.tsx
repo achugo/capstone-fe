@@ -2,22 +2,70 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
+import {toast} from 'react-toastify';
+import axios from "axios";
 
 export default function UserDashboard() {
   const [userInfo, setUserInfo] = useState<any>({});
-  const router = useRouter()
+  const router = useRouter();
+  const [basket, setBasket] = useState<any>([])
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     // Perform localStorage action
     const item = localStorage.getItem("userData");
     if (item) {
       setUserInfo(JSON.parse(item));
     }
+    fetchBasketItems()
   }, []);
 
   const logout = () => {
     localStorage.clear();
     router.push("/");
+    setTimeout(() => {
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
+    }, 1000);
   };
+
+  const fetchBasketItems = async () => {
+    setLoading(true);
+  
+    // Retrieve the token from local storage
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      toast.error("No authentication token found. Please log in.");
+      setLoading(false);
+      return;
+    }
+  
+    const headers = {
+      "Authorization": `Bearer ${token}` // Authorization header with the Bearer token
+    };
+  
+    try {
+      // Make a GET request to the basket endpoint
+      const response = await axios.get(`https://api.grocery-guru.de/api/basket/`, { headers });
+  
+      // Assuming the API responds with the basket items
+      setLoading(false);
+      console.log("Basket items fetched successfully:", response.data);
+      setBasket(response.data)
+      // You can now set the fetched data to state or context to use in your app
+      // setBasketItems(response.data); // Example
+  
+      toast.success("Basket items fetched successfully.");
+    } catch (error) {
+      setLoading(false);
+      console.error("Failed to fetch basket items:", error);
+      //@ts-ignore
+      toast.error(error?.response?.data?.message || "Failed to fetch basket items.");
+    }
+  };
+  
 
   return (
     <>
@@ -27,7 +75,7 @@ export default function UserDashboard() {
           <div>
             <div
               className="py-2 flex hover:cursor-pointer ps-2 bg-amber-400"
-              // onClick={() => router.push("/")}
+              onClick={() => router.push("/")}
             >
               <Image
                 className="cursor-pointer w-8 h-8 sm:h-12 sm:w-12"
@@ -126,7 +174,7 @@ export default function UserDashboard() {
             className=" sm:flex  py-2.5  ps-2 shadow hover:cursor-pointer hover:bg-amber-400  duration-500 text-center"
           >
             <div className="m-auto sm:m-0 hover:cursor-pointer h-8 w-8 p-2">
-            <FaArrowLeft />
+              <FaArrowLeft />
             </div>
             &nbsp;
             <span className="mt-2  text-xs sm:text-1  sm:inline-block">
@@ -216,7 +264,7 @@ export default function UserDashboard() {
                   WISHLIST
                 </span>
               </div>
-              <h2 className="text-center font-bold text-xl">100</h2>
+              <h2 className="text-center font-bold text-xl">{basket?.length}</h2>
             </div>
             <div className=" w-[160px] rounded-xl bg-amber-400 shadow my-1">
               <div className="flex text-center pt-2  ps-2  hover:cursor-pointer duration-500">
@@ -233,7 +281,7 @@ export default function UserDashboard() {
                   DISCOUNTS
                 </span>
               </div>
-              <h2 className="text-center font-bold text-xl">100</h2>
+              <h2 className="text-center font-bold text-xl">{basket?.length}</h2>
             </div>
             <div className=" w-[160px] rounded-xl bg-amber-400 shadow my-1">
               <div className="flex text-center pt-2  ps-2  hover:cursor-pointer duration-500">
@@ -266,7 +314,7 @@ export default function UserDashboard() {
                     Item
                   </th>
                   <th className="px-3 py-3 text-xs font-normal text-left text-black uppercase align-middle">
-                    Link
+                    Description
                   </th>
                   <th className="px-3 py-3 text-xs font-normal text-left text-black uppercase align-middle">
                     Discount
@@ -274,73 +322,31 @@ export default function UserDashboard() {
                 </tr>
               </thead>
               <tbody className="text-sm bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-3 py-4">
-                    <div className="flex items-center w-max">
-                      <img
-                        width="50"
-                        height="50"
-                        className="w-10 h-10 rounded-full"
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlnK-pOokU4qJ2RYbjiSofutlnvcgoTxiFfw&usqp=CAU"
-                        alt="avatar"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-3 py-4">
-                    <span className="px-4 py-1 text-sm text-green-500 rounded-full bg-green-50">
-                      Milk
-                    </span>
-                  </td>
-                  <td className="px-3 py-4 text-gray-500 ">
-                    <a href="www.aldi.com/milk">www.aldi.com/milk</a>
-                  </td>
-                  <td className="w-20 px-3 py-2 text-gray-500 ">12.99</td>
-                </tr>
-                <tr>
-                  <td className="px-3 py-4">
-                    <div className="flex items-center w-max">
-                      <img
-                        width="50"
-                        height="50"
-                        className="w-10 h-10 rounded-full"
-                        src="https://rnz-ressh.cloudinary.com/image/upload/s--x82-b5JG--/c_scale,f_auto,q_auto,w_1050/v1643546860/4OQ88LM_copyright_image_81606"
-                        alt="avatar"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-3 py-4">
-                    <span className="px-4 py-1 text-sm text-green-500 rounded-full bg-green-50">
-                      Banana
-                    </span>
-                  </td>
-                  <td className="px-3 py-4 text-gray-500 ">
-                    <a href="www.aldi.com/milk">www.aldi.com/banana</a>
-                  </td>
-                  <td className="w-20 px-3 py-2 text-gray-500 ">12.99</td>
-                </tr>
-                <tr>
-                  <td className="px-3 py-4">
-                    <div className="flex items-center w-max">
-                      <img
-                        width="50"
-                        height="50"
-                        className="w-10 h-10 rounded-full"
-                        src="                                        https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSpgZnYzaM6C3MTo0ukVvCaw23cggzR94so6aQhofB6fVBUkioHKCnd0N695pqEQ2LW3LxHieZOW8NNbShR4WuM2sJBmRUHA4fAbyaTfTQeknSwppSOv1T5vA&usqp=CAE
-"
-                        alt="avatar"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-3 py-4">
-                    <span className="px-4 py-1 text-sm text-green-500 rounded-full bg-green-50">
-                      Banana
-                    </span>
-                  </td>
-                  <td className="px-3 py-4 text-gray-500 ">
-                    <a href="www.aldi.com/milk">www.aldi.com/cheese</a>
-                  </td>
-                  <td className="w-20 px-3 py-2 text-gray-500 ">12.99</td>
-                </tr>
+                {basket?.map((item: any) => (
+                   <tr>
+                   <td className="px-3 py-4">
+                     <div className="flex items-center w-max">
+                       <img
+                         width="50"
+                         height="50"
+                         className="w-10 h-10 rounded-full"
+                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlnK-pOokU4qJ2RYbjiSofutlnvcgoTxiFfw&usqp=CAU"
+                         alt="avatar"
+                       />
+                     </div>
+                   </td>
+                   <td className="px-3 py-4">
+                     <span className="px-4 py-1 text-sm text-green-500 rounded-full bg-green-50">
+                       {item?.name}
+                     </span>
+                   </td>
+                   <td className="px-3 py-4 text-gray-500 ">
+                     <a href="www.aldi.com/milk">{item?.description}</a>
+                   </td>
+                   <td className="w-20 px-3 py-2 text-gray-500 ">12.99</td>
+                 </tr>
+                ))}
+            
               </tbody>
             </table>
           </div>
