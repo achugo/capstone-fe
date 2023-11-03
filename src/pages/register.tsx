@@ -32,7 +32,10 @@ const Register = ({}: Props) => {
     e.preventDefault();
 
     const userData = { first_name, last_name, email };
-    localStorage.setItem("userData", JSON.stringify(userData));
+    if ((typeof window !== 'undefined')) {
+      localStorage.setItem("userData", JSON.stringify(userData));
+    }
+  
     // Validate the password
     if (!isPasswordValid(password)) {
       setLoading(false);
