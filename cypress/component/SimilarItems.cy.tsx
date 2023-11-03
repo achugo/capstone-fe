@@ -3,7 +3,7 @@ import SimilarItems from "../../src/components/Product/SimilarItems";
 describe('Test SimilarItems component', () => {
 
     beforeEach(() => {
-        let sm = [];
+        let sm: any = [];
         cy.request('GET', 'https://api.grocery-guru.de/api/items/similar/?item_id=TOyPOIsBfDAjQiShCgRJ').then((response) => {
             sm = response.body
             console.log(sm)

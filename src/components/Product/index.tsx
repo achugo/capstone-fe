@@ -1,12 +1,11 @@
-import React, {useState} from "react";
-import {SearchResultType} from "@/data/interfaces/isearchresult";
-import {truncate} from "lodash";
+import React, { useState } from "react";
+import { SearchResultType } from "@/data/interfaces/isearchresult";
+import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
-import {Modal} from "react-responsive-modal";
-import {FaBeer} from "react-icons/fa";
+import { Modal } from "react-responsive-modal";
+import { FaBeer } from "react-icons/fa";
 import {BsEyeFill, BsFillHeartFill, BsHeart} from "react-icons/bs";
-
 
 interface SearchResultProps {
     result: SearchResultType;
@@ -85,7 +84,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
           <div>
             <div
               className="w-[10em] mx-auto"
-              style={{ maxHeight: "220px", minHeight: "220px" }}
+              style={{ maxHeight: "100%", minHeight: "220px" }}
             >
               <img
                 className="max-w-full"
