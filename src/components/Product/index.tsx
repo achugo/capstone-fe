@@ -49,7 +49,11 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     // Prevent default form submission if necessary, depending on how this function is used.
     
     // Assuming the token is stored in the localStorage after login
-    const token = localStorage.getItem("token");
+    let token
+
+    if (typeof window !== 'undefined') {
+      token = localStorage.getItem("token");
+    }
   
     if (!token) {
       toast.error("No authentication token found. Please log in.");

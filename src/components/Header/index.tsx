@@ -30,7 +30,12 @@ const Header = () => {
         formDiv?.classList.replace("mt-24", "mt-0"));
   };
 
-  const token = localStorage.getItem("token");
+  let token
+
+  if (typeof window !== 'undefined') {
+    token = localStorage.getItem("token");
+  }
+
 
   return (
     <div className="sm:flex w-full justify-between py-4 px-2 md:px-10  sticky inset-0 z-[800] h-[73px]">

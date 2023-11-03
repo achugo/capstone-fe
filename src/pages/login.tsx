@@ -29,7 +29,7 @@ const Login = ({}: Props) => {
         password,
       });
 
-      if (response.data.token) {
+      if (response.data.token && (typeof window !== 'undefined')) {
         setLoading(false);
         localStorage.setItem("token", response.data?.token);
         toast.success("login successful");

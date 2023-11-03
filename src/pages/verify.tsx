@@ -19,7 +19,7 @@ const VerifyAccount = ({}: Props) => {
 
   useEffect(() => {
     // Perform localStorage action
-    const item = localStorage.getItem('userData')
+    const item = (typeof window !== 'undefined') && localStorage.getItem('userData')
     if (item) {
       setUserInfo(JSON.parse(item))  
     }
