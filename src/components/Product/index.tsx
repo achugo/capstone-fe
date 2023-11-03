@@ -84,7 +84,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
           <div>
             <div
               className="w-[10em] mx-auto"
-              style={{ maxHeight: "220px", minHeight: "220px" }}
+              style={{ maxHeight: "100%", minHeight: "220px" }}
             >
               <img
                 className="max-w-full"
