@@ -1,7 +1,7 @@
 // productTracker.ts
 
 interface DailyProductViews {
-    [date: string]: { [ip: string]: number };
+    [date: string]: { [productId: string]: { [ip: string]: number } };
   }
   
   export class ProductTracker {
@@ -30,10 +30,14 @@ interface DailyProductViews {
         this.dailyViews[currentDate] = {};
       }
   
-      if (!this.dailyViews[currentDate][ip]) {
-        this.dailyViews[currentDate][ip] = 1;
+      if (!this.dailyViews[currentDate][productId]) {
+        this.dailyViews[currentDate][productId] = {};
+      }
+  
+      if (!this.dailyViews[currentDate][productId][ip]) {
+        this.dailyViews[currentDate][productId][ip] = 1;
       } else {
-        this.dailyViews[currentDate][ip]++;
+        this.dailyViews[currentDate][productId][ip]++;
       }
   
       this.saveViewsToLocalStorage();
@@ -42,8 +46,8 @@ interface DailyProductViews {
     getProductViews(ip: string, productId: string): number {
       const currentDate = new Date().toLocaleDateString();
   
-      if (this.dailyViews[currentDate] && this.dailyViews[currentDate][ip]) {
-        return this.dailyViews[currentDate][ip];
+      if (this.dailyViews[currentDate] && this.dailyViews[currentDate][productId] && this.dailyViews[currentDate][productId][ip]) {
+        return this.dailyViews[currentDate][productId][ip];
       }
   
       return 0;
