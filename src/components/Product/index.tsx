@@ -11,7 +11,45 @@ interface SearchResultProps {
 
 const Product: React.FC<SearchResultProps> = ({ result }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [productView, setProductView] = useState<number>(0);
+  function setCookie(name:string, value:number) {
+  
+    document.cookie = `${name}=${value};path=/`;
+  }
+  
+  function getCookie(value:number) {
+    const cookies = document.cookie.split(';');
+  
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i].trim();
+      
+      if (cookie.includes(`=${value}`)) {
+        // Extract the name (key) of the cookie from the string
+        const cookieName = cookie.split('=')[0];
+        return cookieName;
+      }
+    }
+    
+    return null;
+  }
 
+  
+
+   
+  const showModalHandler = ()=> {
+    const viewedProduct = getCookie(result.id);
+  if (viewedProduct) {
+    console.log(`User has already viewed product with ID: ${result.id} no increment required`);
+    } else {
+      setCookie("viewProduct"+result.id , result.id)
+      console.log(`User has not yet viewed the product with ID: ${result.id} incrementation is required.`);
+      setProductView(productView + 1);
+      // You can also replace the above line with an API call to increment the count on the backend
+    
+          
+  }
+          setShowModal(true)
+  }
 
   return (
     <>
@@ -26,7 +64,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
         style={{ minWidth: "350px" }}
       >
         <div
-          onClick={() => setShowModal(true)}
+          onClick={showModalHandler}
           className="bg-white shadow-md rounded p-6 cursor-pointer hover:scale-110 hover:transition-transform h-[30em]"
         >
           <div>
@@ -56,6 +94,11 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 € {result.price}
               </h1>
               <span className="mt-2">{result.weight}</span>
+            </div>
+
+            <div className="productViews">
+              <h4>
+                views {productView}</h4>
             </div>
           </div>
         </div>
