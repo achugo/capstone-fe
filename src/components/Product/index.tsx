@@ -68,6 +68,8 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     setShowModal(true);
   };
 
+  console.log('product view', productView)
+
     return (
         <>
             <ProductDetailModal
