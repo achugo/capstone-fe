@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { API_BASE_URL } from "@/constants";
 import { useRouter } from "next/router";
 import { json } from "stream/consumers";
+import customToast from "@/components/Toast/customToast";
 
 type Props = {};
 
@@ -17,9 +18,9 @@ const Register = ({}: Props) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [passwordError, setPasswordError] = useState<string>(''); // State for password error
+  const [passwordError, setPasswordError] = useState<string>(""); // State for password error
 
-  const apiUrl = 'http://51.158.96.160:8000/api/registration/signup';
+  const apiUrl = "http://51.158.96.160:8000/api/registration/signup";
 
   const isPasswordValid = (password: string) => {
     // Check if the password meets the criteria (e.g., at least 10 characters with a combination of letters and numbers)
@@ -32,15 +33,19 @@ const Register = ({}: Props) => {
     e.preventDefault();
 
     const userData = { first_name, last_name, email };
-    if ((typeof window !== 'undefined')) {
+    if (typeof window !== "undefined") {
       localStorage.setItem("userData", JSON.stringify(userData));
     }
-  
+
     // Validate the password
     if (!isPasswordValid(password)) {
       setLoading(false);
-      toast.error('Password must be at least 10 characters with a combination of letters and numbers.');
-      setPasswordError('Password must be at least 10 characters with a combination of letters and numbers.');
+      customToast.error(
+        "Password must be at least 10 characters with a combination of letters and numbers."
+      );
+      setPasswordError(
+        "Password must be at least 10 characters with a combination of letters and numbers."
+      );
       return; // Prevent further processing
     }
 
@@ -50,23 +55,23 @@ const Register = ({}: Props) => {
         password,
         last_name,
         first_name,
-        "has_consented_to_data_share": true,
-        "has_consented_to_usage_history": true
+        has_consented_to_data_share: true,
+        has_consented_to_usage_history: true,
       });
 
       if (response) {
         setLoading(false);
       }
       // Handle success
-      toast.success(response.data.message);
+      customToast.success(response.data.message);
       router.push("/verify");
       console.log("Registration successful:", response.data);
     } catch (error) {
       setLoading(false);
       // Handle error
-      console.error('Registration failed:', error);
+      console.error("Registration failed:", error);
       //@ts-ignore
-      toast.error(error?.message);
+      customToast.error(error?.message);
     }
   };
 
@@ -106,7 +111,6 @@ const Register = ({}: Props) => {
                     placeholder="First Name"
                     onChange={(e) => setFirstName(e.target.value)}
                   />
-             
                 </div>
 
                 <div className="relative mb-4" data-te-input-wrapper-init>
@@ -117,7 +121,6 @@ const Register = ({}: Props) => {
                     placeholder="Last Name"
                     onChange={(e) => setLastName(e.target.value)}
                   />
-             
                 </div>
                 <div className="relative mb-4" data-te-input-wrapper-init>
                   <input
@@ -127,7 +130,6 @@ const Register = ({}: Props) => {
                     placeholder="Email address"
                     onChange={(e) => setEmail(e.target.value)}
                   />
-               
                 </div>
 
                 <div className="relative mb-4" data-te-input-wrapper-init>
@@ -138,13 +140,9 @@ const Register = ({}: Props) => {
                     placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                
                 </div>
 
                 <div className="mb-4 flex items-center justify-between flex-wrap">
-
-               
-
                   <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
                     <input
                       className="relative float-left -ml-[1.5rem] mr-[6px] mt-[0.15rem] h-[1.125rem] w-[1.125rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-neutral-300 outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:-mt-px checked:after:ml-[0.25rem] checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-l-0 checked:after:border-t-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:content-[''] checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:-mt-px checked:focus:after:ml-[0.25rem] checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-l-0 checked:focus:after:border-t-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent dark:border-neutral-600 dark:checked:border-primary dark:checked:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
@@ -154,15 +152,16 @@ const Register = ({}: Props) => {
                       required
                     />
 
-
-                 <label 
-                 className="inline-block pl-[0.15rem] hover:cursor-pointer text-sm sm:text-lg"
-                 htmlFor="agreeCheckbox">
-                    I agree to the <a href="#termsPrivacyModal" data-toggle="modal">Terms & Privacy Policy</a>
+                    <label
+                      className="inline-block pl-[0.15rem] hover:cursor-pointer text-sm sm:text-lg"
+                      htmlFor="agreeCheckbox"
+                    >
+                      I agree to the{" "}
+                      <a href="#termsPrivacyModal" data-toggle="modal">
+                        Terms & Privacy Policy
+                      </a>
                     </label>
-      
-                 </div> 
-                
+                  </div>
                 </div>
 
                 <button

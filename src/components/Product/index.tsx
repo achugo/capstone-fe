@@ -3,11 +3,9 @@ import { SearchResultType } from "@/data/interfaces/isearchresult";
 import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { toast } from "react-toastify";
-import { FaBeer } from "react-icons/fa";
 import { BsFillHeartFill, BsHeart } from "react-icons/bs";
 import axios from "axios";
+import customToast from "../Toast/customToast";
 
 interface SearchResultProps {
   result: SearchResultType;
@@ -38,8 +36,8 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     return null;
   }
 
-  console.log('result', result);
-  
+  console.log("result", result);
+
   enum ToolTip {
     liked = "Add to WishList",
     disliked = "Remove from WishList",
@@ -47,48 +45,49 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
 
   const addToBasket = async (product_id: number) => {
     // Prevent default form submission if necessary, depending on how this function is used.
-    
-    // Assuming the token is stored in the localStorage after login
-    let token
 
-    if (typeof window !== 'undefined') {
+    // Assuming the token is stored in the localStorage after login
+    let token;
+
+    if (typeof window !== "undefined") {
       token = localStorage.getItem("token");
     }
-  
+
     if (!token) {
-      toast.error("No authentication token found. Please log in.");
+      customToast.error("No authentication token found. Please log in.");
       return;
     }
-  
+
     const headers = {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`, // Add the Authorization header with the Bearer token
+      Authorization: `Bearer ${token}`, // Add the Authorization header with the Bearer token
     };
-  
+
     try {
       // Using a template literal to insert the product_id into the URL
-      const response = await axios.post(`https://api.grocery-guru.de/api/basket/${product_id}/`, {}, { headers });
-  
+      const response = await axios.post(
+        `https://api.grocery-guru.de/api/basket/${product_id}/`,
+        {},
+        { headers }
+      );
+
       // Assuming the API responds with some data to indicate success
-      toast.success(`${result.title} added to basket`);
+      customToast.success(`${result.title} added to basket`);
       setIsLiked(true);
       console.log("Response data:", response.data);
-      
+
       // Redirect or handle the successful response here
     } catch (error) {
       // Handle error
       console.error("Request failed:", error);
       //@ts-ignore
-      toast.error(error?.response?.data?.message || error?.message);
+      customToast.error(error?.response?.data?.message || error?.message);
     }
   };
 
-  
-  
-
   const handleBasket = (ev: any) => {
     if (!isLiked) {
-      addToBasket(result?.id)
+      addToBasket(result?.id);
       // todo -- Handle request to backend
     } else {
       // setIsLiked(false);
@@ -154,7 +153,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 </h1>
               </div>
               <span className="mt-9">{result.weight}</span>
-            
+
               <div className="mt-7 mx-2 cursor-pointer" onClick={handleBasket}>
                 <span
                   className="mt-1 tooltip"
@@ -169,8 +168,8 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
               </div>
             </div>
             <div className="productViews">
-                <h4>views {productView}</h4>
-              </div>
+              <h4>views {productView}</h4>
+            </div>
           </div>
         </div>
       </div>

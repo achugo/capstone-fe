@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
+import customToast from "@/components/Toast/customToast";
 export default function App({ Component, pageProps }: AppProps) {
   const [location, setLocation] = useState(false);
 
@@ -17,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
   };
 
   const onError = (error: GeolocationPositionError) => {
-    toast.error("Unfortunately, device location could not be retrieved");
+    customToast.error("Unfortunately, device location could not be retrieved");
   };
   useEffect(() => {
     navigator && navigator.geolocation.getCurrentPosition(onSuccess, onError);
