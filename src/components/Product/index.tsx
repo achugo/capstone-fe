@@ -124,8 +124,8 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 cursor-pointer"
         style={{ minWidth: "350px" }}
       >
-        <div className="bg-white shadow-md rounded p-6 cursor-auto hover:scale-110 hover:transition-transform h-[30em]">
-          <div>
+        <div className="bg-white shadow-md rounded p-6 cursor-auto  h-fit hover:scale-110 hover:transition-transform h-[30em]">
+          <div className="flex flex-col gap-4">
             <div
               className="w-[10em] mx-auto"
               style={{ maxHeight: "100%", minHeight: "220px" }}
@@ -136,25 +136,22 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 alt="Picture of the author"
               />
             </div>
-
-            <h3 className="text-lg font-semibold mb-2 text-black">
+            <h3 className="text-lg font-semibold  text-black">
               {result.title}
             </h3>
-
-            <div className="h-[100px]">
-              <h4>{truncate(result.description, { length: 100 })}</h4>
+            <div className="h-fit">
+              <h4>{truncate(result.description, { length: 100 })} </h4>
             </div>
-
-            <div className="flex justify-between mt-2">
+            <div className="flex justify-between  ">
               <div onClick={showModalHandler} className="cursor-pointer">
-                <p className="mt-2 bold text-orange-700">Shop: {result.shop}</p>
+                <p className="bold text-orange-700">Shop: {result.shop}</p>
                 <h1 className="w-[150px] text-2xl font-bold text-[#fe7d00]">
                   € {result.price}
                 </h1>
               </div>
-              <span className="mt-9">{result.weight}</span>
+              <span className="mt-2">{result.weight}</span>
 
-              <div className="mt-7 mx-2 cursor-pointer" onClick={handleBasket}>
+              <div className="mt-4 mx-2 cursor-pointer" onClick={handleBasket}>
                 <span
                   className="mt-1 tooltip"
                   data-tip={isLiked ? ToolTip.disliked : ToolTip.liked}
@@ -166,8 +163,8 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                   )}
                 </span>
               </div>
-            </div>
-            <div className="productViews">
+            </div>{" "}
+            <div className="productViews mb-2">
               <h4>views {productView}</h4>
             </div>
           </div>
