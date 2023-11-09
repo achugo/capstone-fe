@@ -41,6 +41,9 @@ export default function Home() {
 
       if (result) {
         setSearchResults(result);
+        document.getElementById("search-container")?.scrollIntoView({
+          behavior: "smooth",
+        });
       }
     } catch (error) {
       customToast.error("Couldn't get any results");
@@ -77,7 +80,7 @@ export default function Home() {
       </SearchLayout>
 
       <div className="bg-[#F5F3F0]">
-        <div className="max-w-5xl pt-16 mx-auto">
+        <div className="max-w-5xl pt-16 mx-auto " id="search-container">
           {loading && (
             <div className="flex justify-center">
               <ReactLoading type={"spin"} color="#ecc229" />
