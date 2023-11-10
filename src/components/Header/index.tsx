@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
 const Header = () => {
   const router = useRouter();
+  const [token, setToken] = useState<string | null>();
   const handleDropDown = (ev: any) => {
     const dropDown = document.getElementById("dropDownMenu");
     const menuStatus = ev.target.classList.contains("close");
@@ -30,12 +31,11 @@ const Header = () => {
         formDiv?.classList.replace("mt-24", "mt-0"));
   };
 
-  let token
-
-  if (typeof window !== 'undefined') {
-    token = localStorage.getItem("token");
-  }
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
 
   return (
     <div className="sm:flex w-full justify-between py-4 px-2 md:px-10  sticky inset-0 z-[800] h-[73px]">

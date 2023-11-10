@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
-import {toast} from 'react-toastify';
+import { toast } from "react-toastify";
 import axios from "axios";
+import customToast from "../Toast/customToast";
 
 export default function UserDashboard() {
   const [userInfo, setUserInfo] = useState<any>({});
   const router = useRouter();
-  const [basket, setBasket] = useState<any>([])
+  const [basket, setBasket] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -17,7 +18,7 @@ export default function UserDashboard() {
     if (item) {
       setUserInfo(JSON.parse(item));
     }
-    fetchBasketItems()
+    fetchBasketItems();
   }, []);
 
   const logout = () => {
@@ -32,40 +33,44 @@ export default function UserDashboard() {
 
   const fetchBasketItems = async () => {
     setLoading(true);
-  
+
     // Retrieve the token from local storage
     const token = localStorage.getItem("token");
-  
+
     if (!token) {
-      toast.error("No authentication token found. Please log in.");
+      customToast.error("No authentication token found. Please log in.");
       setLoading(false);
       return;
     }
-  
+
     const headers = {
-      "Authorization": `Bearer ${token}` // Authorization header with the Bearer token
+      Authorization: `Bearer ${token}`, // Authorization header with the Bearer token
     };
-  
+
     try {
       // Make a GET request to the basket endpoint
-      const response = await axios.get(`https://api.grocery-guru.de/api/basket/`, { headers });
-  
+      const response = await axios.get(
+        `https://api.grocery-guru.de/api/basket/`,
+        { headers }
+      );
+
       // Assuming the API responds with the basket items
       setLoading(false);
       console.log("Basket items fetched successfully:", response.data);
-      setBasket(response.data)
+      setBasket(response.data);
       // You can now set the fetched data to state or context to use in your app
       // setBasketItems(response.data); // Example
-  
-      toast.success("Basket items fetched successfully.");
-    } catch (error) {
+
+      customToast.success("Basket items fetched successfully.");
+    } catch (error: any) {
       setLoading(false);
       console.error("Failed to fetch basket items:", error);
       //@ts-ignore
-      toast.error(error?.response?.data?.message || "Failed to fetch basket items.");
+      customToast.error(
+        error?.response?.data?.message || "Failed to fetch basket items."
+      );
     }
   };
-  
 
   return (
     <>
@@ -264,7 +269,9 @@ export default function UserDashboard() {
                   WISHLIST
                 </span>
               </div>
-              <h2 className="text-center font-bold text-xl">{basket?.length}</h2>
+              <h2 className="text-center font-bold text-xl">
+                {basket?.length}
+              </h2>
             </div>
             <div className=" w-[160px] rounded-xl bg-amber-400 shadow my-1">
               <div className="flex text-center pt-2  ps-2  hover:cursor-pointer duration-500">
@@ -281,7 +288,9 @@ export default function UserDashboard() {
                   DISCOUNTS
                 </span>
               </div>
-              <h2 className="text-center font-bold text-xl">{basket?.length}</h2>
+              <h2 className="text-center font-bold text-xl">
+                {basket?.length}
+              </h2>
             </div>
             <div className=" w-[160px] rounded-xl bg-amber-400 shadow my-1">
               <div className="flex text-center pt-2  ps-2  hover:cursor-pointer duration-500">
@@ -323,30 +332,29 @@ export default function UserDashboard() {
               </thead>
               <tbody className="text-sm bg-white divide-y divide-gray-200">
                 {basket?.map((item: any) => (
-                   <tr>
-                   <td className="px-3 py-4">
-                     <div className="flex items-center w-max">
-                       <img
-                         width="50"
-                         height="50"
-                         className="w-10 h-10 rounded-full"
-                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlnK-pOokU4qJ2RYbjiSofutlnvcgoTxiFfw&usqp=CAU"
-                         alt="avatar"
-                       />
-                     </div>
-                   </td>
-                   <td className="px-3 py-4">
-                     <span className="px-4 py-1 text-sm text-green-500 rounded-full bg-green-50">
-                       {item?.name}
-                     </span>
-                   </td>
-                   <td className="px-3 py-4 text-gray-500 ">
-                     <a href="www.aldi.com/milk">{item?.description}</a>
-                   </td>
-                   <td className="w-20 px-3 py-2 text-gray-500 ">12.99</td>
-                 </tr>
+                  <tr>
+                    <td className="px-3 py-4">
+                      <div className="flex items-center w-max">
+                        <img
+                          width="50"
+                          height="50"
+                          className="w-10 h-10 rounded-full"
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlnK-pOokU4qJ2RYbjiSofutlnvcgoTxiFfw&usqp=CAU"
+                          alt="avatar"
+                        />
+                      </div>
+                    </td>
+                    <td className="px-3 py-4">
+                      <span className="px-4 py-1 text-sm text-green-500 rounded-full bg-green-50">
+                        {item?.name}
+                      </span>
+                    </td>
+                    <td className="px-3 py-4 text-gray-500 ">
+                      <a href="www.aldi.com/milk">{item?.description}</a>
+                    </td>
+                    <td className="w-20 px-3 py-2 text-gray-500 ">12.99</td>
+                  </tr>
                 ))}
-            
               </tbody>
             </table>
           </div>

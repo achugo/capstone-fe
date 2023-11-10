@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Loader from "@/components/loader/Loader";
 import { API_BASE_URL } from "@/constants";
+import customToast from "@/components/Toast/customToast";
 type Props = {};
 
 const Login = ({}: Props) => {
@@ -29,10 +30,10 @@ const Login = ({}: Props) => {
         password,
       });
 
-      if (response.data.token && (typeof window !== 'undefined')) {
+      if (response.data.token && typeof window !== "undefined") {
         setLoading(false);
         localStorage.setItem("token", response.data?.token);
-        toast.success("login successful");
+        customToast.success("login successful");
         router.push("/user");
       }
       // Handle success
@@ -42,7 +43,7 @@ const Login = ({}: Props) => {
       // Handle error
       console.error("Registration failed:", error);
       //@ts-ignore
-      toast.error(error?.message);
+      customToast.error(error?.message);
     }
   };
 
@@ -82,7 +83,6 @@ const Login = ({}: Props) => {
                     placeholder="Email address"
                     onChange={(e) => setEmail(e.target.value)}
                   />
-              
                 </div>
 
                 <div className="relative mb-6" data-te-input-wrapper-init>
@@ -93,7 +93,6 @@ const Login = ({}: Props) => {
                     placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
                   />
-              
                 </div>
 
                 <div className="mb-6 flex items-center justify-between flex-wrap">
