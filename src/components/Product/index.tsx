@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SearchResultType } from "@/data/interfaces/isearchresult";
 import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
@@ -15,12 +15,21 @@ interface SearchResultProps {
 }
 
 const Product: React.FC<SearchResultProps> = ({ result }) => {
+  const [ipAddress, setIPAddress] = useState('')
+
+  useEffect(() => {
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => setIPAddress(data.ip))
+      .catch(error => console.log(error))
+  }, []);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const handleProductClick = (ev: any) =>{
     setShowModal(true)
     const productTracker = new ProductTracker();
-    const userIP = '128.0.0.1';
-    productTracker.trackProductView(userIP,result.id)
+    
+    productTracker.trackProductView(ipAddress,result.id.toString())
 
 
   }
