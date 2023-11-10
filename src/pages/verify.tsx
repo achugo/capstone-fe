@@ -6,6 +6,7 @@ import Loader from "@/components/loader/Loader";
 import { toast } from "react-toastify";
 import { API_BASE_URL } from "@/constants";
 import { useRouter } from "next/router";
+import customToast from "@/components/Toast/customToast";
 
 type Props = {};
 
@@ -14,43 +15,43 @@ const VerifyAccount = ({}: Props) => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>({});
-  const router = useRouter()
-  
+  const router = useRouter();
 
   useEffect(() => {
     // Perform localStorage action
-    const item = localStorage.getItem('userData')
+    const item =
+      typeof window !== "undefined" && localStorage.getItem("userData");
     if (item) {
-      setUserInfo(JSON.parse(item))  
+      setUserInfo(JSON.parse(item));
     }
-  }, [])
-
+  }, []);
 
   const handleSubmit = async (e: any) => {
     setLoading(true);
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${API_BASE_URL}registration/signup/verify/`, {
-        email: userInfo?.email,
-        code,
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}registration/signup/verify/`,
+        {
+          email: userInfo?.email,
+          code,
+        }
+      );
       if (response.data?.token) {
         setLoading(false);
-        localStorage.setItem('token', response.data?.token)
-        toast.success('user verification successful');
-        router.push('/user')
-   
+        localStorage.setItem("token", response.data?.token);
+        customToast.success("user verification successful");
+        router.push("/user");
       }
 
-    
       // Handle success
     } catch (error) {
       setLoading(false);
       // Handle error
       console.error("Registration failed:", error);
       //@ts-ignore
-      toast.error(error?.message);
+      customToast.error(error?.message);
     }
   };
   return (
@@ -96,7 +97,6 @@ const VerifyAccount = ({}: Props) => {
                     OTP
                   </label>
                 </div>
-
 
                 <button
                   type="submit"

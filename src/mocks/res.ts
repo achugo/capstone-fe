@@ -4,7 +4,7 @@ export const responseData = [
     price: 19.99,
     name: "Product A",
     description: "This is the description for Product A",
-    image: "https://www.coop.ch/de/lebensmittel/fruechte-gemuese/salatgemuese/tomaten/rispentomaten-ca/p/3090149",
+    image: "",
     shop: "Shop A",
     date: "2023-09-22",
     address: "123 Main Street",

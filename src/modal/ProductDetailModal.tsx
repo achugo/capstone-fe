@@ -1,8 +1,13 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { FaMapMarker } from "react-icons/fa";
 import { SearchResultType } from "@/data/interfaces/isearchresult";
+import Image from "next/image";
+import SimilarItems from "@/components/Product/SimilarItems";
+import { API_BASE_URL } from "@/constants";
+import { toast } from "react-toastify";
+import customToast from "@/components/Toast/customToast";
 
 interface ProductDetailModalProps {
   result: SearchResultType;
@@ -13,7 +18,7 @@ interface ProductDetailModalProps {
 const MapLink = ({ destinationAddress }: any) => {
   const location = localStorage.getItem("location") ?? "";
 
-  console.log("userLocation", JSON.parse(location));
+  // console.log("userLocation", JSON.parse(location));
   // Create a function to open Google Maps with the destination address.
   const openGoogleMaps = () => {
     const userCordinates = JSON.parse(location); // You can replace this with the user's location if needed.
@@ -36,8 +41,34 @@ const ProductDetailModal = ({
   setShowModal,
 }: ProductDetailModalProps) => {
   const onCloseModal = () => setShowModal(false);
-  console.log("result", result);
+  const [similarItems, setSimilarItems] = useState([]);
+  console.log(result);
+  const fetchSimilarItems = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}items/similar/?item_id=${result.id}`,
+        {
+          method: "GET",
+          mode: "cors", // Set the mode to 'no-cors'
+          headers: {
+            "Content-Type": "application/json", // Your request headers here
+          },
+        }
+      );
+      let data = await response.json();
 
+      if (data) {
+        setSimilarItems(data);
+      }
+    } catch (error) {
+      customToast.error("Couldn't get any results");
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSimilarItems();
+  }, []);
   return (
     <Modal open={showModal} onClose={onCloseModal} center>
       <div className="min-h-[40em] min-w-[40em]">
@@ -46,14 +77,12 @@ const ProductDetailModal = ({
           <div
             className="w-[26em] mx-auto my-4 cursor-pointer"
             style={{ minHeight: "22em" }}
-            onClick={() => window.open(result?.articleLink
-                , '_blank')}
-
+            onClick={() => window.open(result?.articleLink, "_blank")}
           >
             <img
               className="max-w-full min-h-[22em]"
               src={result.imageUrl}
-              alt="Picture of the author"
+              alt="Picture of the item"
             />
           </div>
 
@@ -87,15 +116,19 @@ const ProductDetailModal = ({
             <span className="text-[#fe7d00] text-lg">{result.weight}</span>
           </div>
 
-          <div className="flex">
+          <div className="flex mb-3">
             <span>
-             Location <FaMapMarker className="inline relative" color="#fe7d00" />{" "}
-            </span>{": "}
+              Location{" "}
+              <FaMapMarker className="inline relative" color="#fe7d00" />{" "}
+            </span>
+            {": "}
             <h4 className="text-lg">
               <MapLink destinationAddress={result.location} />
             </h4>
           </div>
         </div>
+        <hr className="border" />
+        {similarItems && <SimilarItems similarItems={similarItems} />}
       </div>
     </Modal>
   );

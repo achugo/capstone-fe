@@ -20,6 +20,7 @@ datadogRum.init({
   trackLongTasks: true,
   defaultPrivacyLevel: "mask-user-input",
 });
+import customToast from "@/components/Toast/customToast";
 export default function App({ Component, pageProps }: AppProps) {
   const [location, setLocation] = useState(false);
 
@@ -34,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
   };
 
   const onError = (error: GeolocationPositionError) => {
-    toast.error("Unfortunately, device location could not be retrieved");
+    customToast.error("Unfortunately, device location could not be retrieved");
   };
   useEffect(() => {
     navigator && navigator.geolocation.getCurrentPosition(onSuccess, onError);
@@ -46,12 +47,11 @@ export default function App({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />;
       <ToastContainer
         position="top-right"
-        autoClose={8000}
+        autoClose={3000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop={true}
         draggable={false}
         closeOnClick
-        pauseOnHover
       />
     </>
   );

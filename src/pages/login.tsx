@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Loader from "@/components/loader/Loader";
 import { API_BASE_URL } from "@/constants";
+import customToast from "@/components/Toast/customToast";
 type Props = {};
 
 const Login = ({}: Props) => {
@@ -29,10 +30,10 @@ const Login = ({}: Props) => {
         password,
       });
 
-      if (response.data.token) {
+      if (response.data.token && typeof window !== "undefined") {
         setLoading(false);
         localStorage.setItem("token", response.data?.token);
-        toast.success("login successful");
+        customToast.success("login successful");
         router.push("/user");
       }
       // Handle success
@@ -42,7 +43,7 @@ const Login = ({}: Props) => {
       // Handle error
       console.error("Registration failed:", error);
       //@ts-ignore
-      toast.error(error?.message);
+      customToast.error(error?.message);
     }
   };
 
@@ -77,33 +78,21 @@ const Login = ({}: Props) => {
                 <div className="relative mb-6" data-te-input-wrapper-init>
                   <input
                     type="text"
-                    className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                    className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear "
                     id="exampleFormControlInput3"
                     placeholder="Email address"
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  <label
-                    htmlFor="exampleFormControlInput3"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-gray-500 dark:peer-focus:text-primary"
-                  >
-                    Email address
-                  </label>
                 </div>
 
                 <div className="relative mb-6" data-te-input-wrapper-init>
                   <input
                     type="password"
-                    className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-gray-600 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                    className="peer block min-h-[auto] w-full rounded border-2 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear"
                     id="exampleFormControlInput33"
                     placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <label
-                    htmlFor="exampleFormControlInput33"
-                    className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-gray-500 dark:peer-focus:text-primary"
-                  >
-                    Password
-                  </label>
                 </div>
 
                 <div className="mb-6 flex items-center justify-between flex-wrap">

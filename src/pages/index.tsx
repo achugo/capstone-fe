@@ -9,6 +9,9 @@ import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
 import { is } from "cypress/types/bluebird";
 import SearchResults from "@/components/results/SearchResult";
+import Product from "@/components/Product";
+import { responseData } from "../mocks/res";
+import customToast from "@/components/Toast/customToast";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
@@ -21,7 +24,9 @@ export default function Home() {
   const fetchResults = async () => {
     try {
       setLoading(true);
-
+      console.log(
+        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
+      );
       const response = await fetch(
         `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`,
         {
@@ -36,9 +41,12 @@ export default function Home() {
 
       if (result) {
         setSearchResults(result);
+        document.getElementById("search-container")?.scrollIntoView({
+          behavior: "smooth",
+        });
       }
     } catch (error) {
-      toast.error("Couldn't get any results");
+      customToast.error("Couldn't get any results");
       console.log("error", error);
     } finally {
       setLoading(false);
@@ -72,7 +80,7 @@ export default function Home() {
       </SearchLayout>
 
       <div className="bg-[#F5F3F0]">
-        <div className="max-w-5xl pt-16 mx-auto">
+        <div className="max-w-5xl pt-16 mx-auto " id="search-container">
           {loading && (
             <div className="flex justify-center">
               <ReactLoading type={"spin"} color="#ecc229" />
