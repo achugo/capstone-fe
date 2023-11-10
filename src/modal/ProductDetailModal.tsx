@@ -41,7 +41,6 @@ const ProductDetailModal = ({
                             }: ProductDetailModalProps) => {
     const onCloseModal = () => setShowModal(false);
     const [similarItems, setSimilarItems] = useState([])
-    console.log(result)
     const fetchSimilarItems = async () => {
         try {
             const response = await fetch(
