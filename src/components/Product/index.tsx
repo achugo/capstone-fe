@@ -5,6 +5,7 @@ import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import {ProductTracker} from "@/product_views_tracker/productTracker";
+import {ProductTracker} from "@/product_views_tracker/productTracker";
 import { toast } from "react-toastify";
 import { FaBeer } from "react-icons/fa";
 import { BsFillHeartFill, BsHeart } from "react-icons/bs";
