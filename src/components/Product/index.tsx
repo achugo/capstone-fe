@@ -4,14 +4,10 @@ import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-<<<<<<< HEAD
-import { BsEyeFill} from "react-icons/bs";
-=======
 import { FaBeer } from "react-icons/fa";
 import {BsEyeFill, BsFillHeartFill, BsHeart} from "react-icons/bs";
 import axios from "axios";
 import customToast from "../Toast/customToast";
->>>>>>> origin/main
 
 interface SearchResultProps {
     result: SearchResultType;
@@ -147,14 +143,9 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
             <h3 className="text-lg font-semibold  text-black">
               {result.title}
             </h3>
-<<<<<<< HEAD
 
             <div className="h-[80px]">
               <h4>{truncate(result.description, { length: 100 })}</h4>
-=======
-            <div className="h-fit">
-              <h4>{truncate(result.description, { length: 100 })} </h4>
->>>>>>> origin/main
             </div>
             <div className="flex justify-between  ">
               <div onClick={showModalHandler} className="cursor-pointer">
@@ -164,14 +155,6 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 </h1>
               </div>
               <span className="mt-2">{result.weight}</span>
-<<<<<<< HEAD
-              
-              
-            </div>
-
-            <div className="productViews mb-2" style={{ bottom: "0", }}>
-            <p className="flex"><BsEyeFill className="text-[#fe7d00] text-2xl"/>&nbsp;{productView}</p>
-=======
 
               <div className="mt-4 mx-2 cursor-pointer" onClick={handleBasket}>
                 <span
@@ -188,7 +171,6 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
             </div>{" "}
             <div className="productViews mb-2">
               <h4>views {productView}</h4>
->>>>>>> origin/main
             </div>
 
           </div>
