@@ -3,12 +3,14 @@ import { SearchResultType } from "@/data/interfaces/isearchresult";
 import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
-import { BsFillHeartFill, BsHeart } from "react-icons/bs";
+import { Modal } from "react-responsive-modal";
+import { FaBeer } from "react-icons/fa";
+import {BsEyeFill, BsFillHeartFill, BsHeart} from "react-icons/bs";
 import axios from "axios";
 import customToast from "../Toast/customToast";
 
 interface SearchResultProps {
-  result: SearchResultType;
+    result: SearchResultType;
 }
 
 const Product: React.FC<SearchResultProps> = ({ result }) => {
@@ -112,13 +114,15 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     setShowModal(true);
   };
 
-  return (
-    <>
-      <ProductDetailModal
-        result={result}
-        showModal={showModal}
-        setShowModal={setShowModal}
-      />
+  console.log('product view', productView)
+
+    return (
+        <>
+            <ProductDetailModal
+                result={result}
+                showModal={showModal}
+                setShowModal={setShowModal}
+            />
 
       <div
         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 cursor-pointer"
