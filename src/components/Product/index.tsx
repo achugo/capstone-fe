@@ -6,6 +6,8 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { FaBeer } from "react-icons/fa";
 import {BsEyeFill, BsFillHeartFill, BsHeart} from "react-icons/bs";
+import axios from "axios";
+import customToast from "../Toast/customToast";
 
 interface SearchResultProps {
     result: SearchResultType;
@@ -36,17 +38,61 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     return null;
   }
 
+  console.log("result", result);
+
   enum ToolTip {
     liked = "Add to WishList",
     disliked = "Remove from WishList",
   }
 
+  const addToBasket = async (product_id: number) => {
+    // Prevent default form submission if necessary, depending on how this function is used.
+
+    // Assuming the token is stored in the localStorage after login
+    let token;
+
+    if (typeof window !== "undefined") {
+      token = localStorage.getItem("token");
+    }
+
+    if (!token) {
+      customToast.error("No authentication token found. Please log in.");
+      return;
+    }
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // Add the Authorization header with the Bearer token
+    };
+
+    try {
+      // Using a template literal to insert the product_id into the URL
+      const response = await axios.post(
+        `https://api.grocery-guru.de/api/basket/${product_id}/`,
+        {},
+        { headers }
+      );
+
+      // Assuming the API responds with some data to indicate success
+      customToast.success(`${result.title} added to basket`);
+      setIsLiked(true);
+      console.log("Response data:", response.data);
+
+      // Redirect or handle the successful response here
+    } catch (error) {
+      // Handle error
+      console.error("Request failed:", error);
+      //@ts-ignore
+      customToast.error(error?.response?.data?.message || error?.message);
+    }
+  };
+
   const handleBasket = (ev: any) => {
     if (!isLiked) {
-      setIsLiked(true);
+      addToBasket(result?.id);
       // todo -- Handle request to backend
     } else {
-      setIsLiked(false);
+      // setIsLiked(false);
       // todo -- Handle request to backend
     }
   };
@@ -82,8 +128,8 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 cursor-pointer"
         style={{ minWidth: "350px" }}
       >
-        <div className="bg-white shadow-md rounded p-6 cursor-auto hover:scale-110 hover:transition-transform h-[30em]">
-          <div>
+        <div className="bg-white shadow-md rounded p-6 cursor-auto  h-fit hover:scale-110 hover:transition-transform h-[30em]">
+          <div className="flex flex-col gap-4">
             <div
               className="w-[10em] mx-auto"
               style={{ maxHeight: "100%", minHeight: "220px" }}
@@ -94,24 +140,22 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 alt="Picture of the author"
               />
             </div>
-
-                        <h3 className="text-lg font-semibold mb-2 text-black">
-                            {result.title}
-                        </h3>
-
-                        <div className="h-[100px]">
-                            <h4>{truncate(result.description, {length: 100})}</h4>
-                        </div>
-
-            <div className="flex justify-between mt-2">
+            <h3 className="text-lg font-semibold  text-black">
+              {result.title}
+            </h3>
+            <div className="h-fit">
+              <h4>{truncate(result.description, { length: 100 })} </h4>
+            </div>
+            <div className="flex justify-between  ">
               <div onClick={showModalHandler} className="cursor-pointer">
-                <p className="mt-2 bold text-orange-700">Shop: {result.shop}</p>
+                <p className="bold text-orange-700">Shop: {result.shop}</p>
                 <h1 className="w-[150px] text-2xl font-bold text-[#fe7d00]">
                   € {result.price}
                 </h1>
               </div>
-              <span className="mt-9">{result.weight === 'No weight information found' ? '' : result.weight}</span>
-              <div className="mt-7 mx-2 cursor-pointer" onClick={handleBasket}>
+              <span className="mt-2">{result.weight}</span>
+
+              <div className="mt-4 mx-2 cursor-pointer" onClick={handleBasket}>
                 <span
                   className="mt-1 tooltip"
                   data-tip={isLiked ? ToolTip.disliked : ToolTip.liked}
@@ -123,9 +167,9 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                   )}
                 </span>
               </div>
-            </div>
+            </div>{" "}
             <div className="productViews mb-2">
-              <p className="flex"><BsEyeFill className="text-[#fe7d00] text-2xl"/>&nbsp;{productView}</p>
+              <h4>views {productView}</h4>
             </div>
           </div>
         </div>

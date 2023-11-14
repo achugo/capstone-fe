@@ -19,7 +19,7 @@ const Register = ({}: Props) => {
     const router = useRouter();
     const [passwordError, setPasswordError] = useState<string>(''); // State for password error
     const [usageHistoryConsent, setUsageHistoryConsent] = useState(true); // Add usage history consent state
-    const apiUrl = 'http://51.158.96.160:8000/api/registration/signup';
+
 
     const isPasswordValid = (password: string) => {
         // Check if the password meets the criteria (e.g., at least 10 characters with a combination of letters and numbers)
