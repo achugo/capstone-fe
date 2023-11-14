@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { FaPlateWheat } from "react-icons/fa6";
 import axios from "axios";
 import customToast from "../Toast/customToast";
 
@@ -11,6 +11,8 @@ export default function UserDashboard() {
   const router = useRouter();
   const [basket, setBasket] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+
+  const [numberOfPlates, setNumberOfPlates] = useState(0);
 
   useEffect(() => {
     // Perform localStorage action
@@ -49,15 +51,22 @@ export default function UserDashboard() {
 
     try {
       // Make a GET request to the basket endpoint
-      const response = await axios.get(
+      const basketPromise = axios.get(
         `https://api.grocery-guru.de/api/basket/`,
         { headers }
       );
 
+      const numberOfPlatesPromise = axios.get(`/api/number_of_plates`);
+
+      const [basketResponse, numberOfPlatesResponse] = await Promise.all([
+        basketPromise,
+        numberOfPlatesPromise,
+      ]);
       // Assuming the API responds with the basket items
       setLoading(false);
-      console.log("Basket items fetched successfully:", response.data);
-      setBasket(response.data);
+      console.log("Basket items fetched successfully:", basketResponse.data);
+      setBasket(basketResponse.data);
+      setNumberOfPlates(numberOfPlatesResponse.data.number_of_plates);
       // You can now set the fetched data to state or context to use in your app
       // setBasketItems(response.data); // Example
 
@@ -211,28 +220,34 @@ export default function UserDashboard() {
                 </button>
               </div>
             </div>
-            <div className="rounded-full bg-white w-auto flex justify-between p-1">
-              <p className="pt-2 ms-2 hidden lg:inline-block me-1">
-                Hello, {userInfo?.first_name}
-              </p>
-              <div className="w-10 h-10  bg-amber-300 rounded-full">
-                <button
-                  className="ps-1 pt-1"
-                  type="button"
-                  id="button-addon1"
-                  data-te-ripple-init
-                  data-te-ripple-color="light"
-                  // onClick={onSubmit}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="1em"
-                    viewBox="0 0 448 512"
-                    className="ms-2 mt-2"
+            <div className="flex justify-center items-center">
+              <div className="rounded-full bg-white w-auto flex  p-4 mr-2  items-center gap-2">
+                <p>{numberOfPlates}</p>
+                <FaPlateWheat />
+              </div>
+              <div className="rounded-full bg-white w-auto flex justify-between p-1">
+                <p className="pt-2 ms-2 hidden lg:inline-block me-1">
+                  Hello, {userInfo?.first_name}
+                </p>
+                <div className="w-10 h-10  bg-amber-300 rounded-full">
+                  <button
+                    className="ps-1 pt-1"
+                    type="button"
+                    id="button-addon1"
+                    data-te-ripple-init
+                    data-te-ripple-color="light"
+                    // onClick={onSubmit}
                   >
-                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="1em"
+                      viewBox="0 0 448 512"
+                      className="ms-2 mt-2"
+                    >
+                      <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
