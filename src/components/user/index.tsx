@@ -6,21 +6,21 @@ import { FaPlateWheat } from "react-icons/fa6";
 import axios from "axios";
 import customToast from "../Toast/customToast";
 
+interface UserInfo {
+  first_name: string;
+  last_name: string;
+  email: string;
+  plates_count: number;
+}
+
 export default function UserDashboard() {
-  const [userInfo, setUserInfo] = useState<any>({});
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const router = useRouter();
   const [basket, setBasket] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
-  const [numberOfPlates, setNumberOfPlates] = useState(0);
-
   useEffect(() => {
-    // Perform localStorage action
-    const item = localStorage.getItem("userData");
-    if (item) {
-      setUserInfo(JSON.parse(item));
-    }
-    fetchBasketItems();
+    fetchBasketItemsAndUserData();
   }, []);
 
   const logout = () => {
@@ -33,7 +33,7 @@ export default function UserDashboard() {
     }, 1000);
   };
 
-  const fetchBasketItems = async () => {
+  const fetchBasketItemsAndUserData = async () => {
     setLoading(true);
 
     // Retrieve the token from local storage
@@ -56,17 +56,23 @@ export default function UserDashboard() {
         { headers }
       );
 
-      const numberOfPlatesPromise = axios.get(`/api/number_of_plates`);
+      const userInfoPromise = axios.get(
+        `https://api.grocery-guru.de/api/core/me/`,
+        {
+          headers,
+        }
+      );
 
-      const [basketResponse, numberOfPlatesResponse] = await Promise.all([
+      const [basketResponse, userInfoResponse] = await Promise.all([
         basketPromise,
-        numberOfPlatesPromise,
+        userInfoPromise,
       ]);
       // Assuming the API responds with the basket items
       setLoading(false);
       console.log("Basket items fetched successfully:", basketResponse.data);
       setBasket(basketResponse.data);
-      setNumberOfPlates(numberOfPlatesResponse.data.number_of_plates);
+      setUserInfo(userInfoResponse.data);
+      // setNumberOfPlates(numberOfPlatesResponse.data.number_of_plates);
       // You can now set the fetched data to state or context to use in your app
       // setBasketItems(response.data); // Example
 
@@ -222,7 +228,7 @@ export default function UserDashboard() {
             </div>
             <div className="flex justify-center items-center">
               <div className="rounded-full bg-white w-auto flex  p-4 mr-2  items-center gap-2">
-                <p>{numberOfPlates}</p>
+                <p>{userInfo?.plates_count}</p>
                 <FaPlateWheat />
               </div>
               <div className="rounded-full bg-white w-auto flex justify-between p-1">
