@@ -168,8 +168,9 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 </span>
               </div>
             </div>{" "}
-            <div className="productViews mb-2">
-              <h4>views {productView}</h4>
+            <div className="productViews mb-2 w-full flex flex-row">
+              <BsEyeFill className="text-yellow-400 text-2xl"/>
+              <h4 className="">&nbsp; {productView}</h4>
             </div>
           </div>
         </div>
