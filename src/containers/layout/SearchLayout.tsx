@@ -11,7 +11,7 @@ export default function SearchLayout({ children }: Props) {
   const userMainStyle = "bg-black bg-opacity-50 h-full";
   return (
     <div
-      style={{ minHeight: "35em", height: "100vh" }}
+      style={{ minHeight: "35em"}}
       className="bg-[url('/landing-background.jpg')] bg-fixed bg-cover  bg-no-repeat	bg-center h-full"
     >
       <main className={userMainStyle}>{children}</main>
