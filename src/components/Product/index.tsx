@@ -46,8 +46,6 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
     return null;
   }
 
-  console.log("result", result);
-
   enum ToolTip {
     liked = "Add to WishList",
     disliked = "Remove from WishList",
@@ -91,7 +89,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
       // Handle error
       console.error("Request failed:", error);
       //@ts-ignore
-      customToast.error(error?.response?.data?.message || error?.message);
+      customToast.error(error?.response?.data?.detail || error?.message);
     }
   };
 

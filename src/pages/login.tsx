@@ -50,7 +50,7 @@ const Login = ({}: Props) => {
   return (
     <PageLayout>
       <Header />
-      <section className="h-screen  w-full overflow-y-hidden sm:py-2">
+      <section className="flex items-center h-screen w-full overflow-y-hidden sm:py-2">
         <div className="container  px-2 py-5">
           <div
             className="grid grid-cols-1 sm:grid-cols-2 gap-1 mx-5 sm:m-0 mt-0 sm:transition-none opacity-100 transition-all ease-in duration-500"
@@ -63,7 +63,7 @@ const Login = ({}: Props) => {
                 alt="Phone image"
               />
             </div>
-            <div className="sm:w-full bg-white shadow-xl rounded-3xl p-5 sm:w-11/12">
+            <div className="sm:w-full bg-white shadow-xl rounded-3xl p-5 md:w-9/12">
               <div className="flex items-center rounded-b-lg lg:rounded-r-lg lg:rounded-bl-none">
                 <div className="p3-6 w-full">
                   <h4 className="mb-4 text-lg text-center sm:text-3xl font-semibold ">
