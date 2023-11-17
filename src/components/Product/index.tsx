@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SearchResultType } from "@/data/interfaces/isearchresult";
 import { truncate } from "lodash";
 import ProductDetailModal from "@/modal/ProductDetailModal";
@@ -8,6 +8,7 @@ import { FaBeer } from "react-icons/fa";
 import {BsEyeFill, BsFillHeartFill, BsHeart} from "react-icons/bs";
 import axios from "axios";
 import customToast from "../Toast/customToast";
+import { ProductTracker } from "@/product_views_tracker/productTracker";
 
 interface SearchResultProps {
     result: SearchResultType;
@@ -17,6 +18,13 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [productView, setProductView] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [ipAddress, setIPAddress] = useState('')
+  useEffect(() => {
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => setIPAddress(data.ip))
+      .catch(error => console.log(error))
+  }, []);
 
   function setCookie(name: string, value: number) {
     document.cookie = `${name}=${value};path=/`;
@@ -37,8 +45,6 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
 
     return null;
   }
-
-  console.log("result", result);
 
   enum ToolTip {
     liked = "Add to WishList",
@@ -83,7 +89,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
       // Handle error
       console.error("Request failed:", error);
       //@ts-ignore
-      customToast.error(error?.response?.data?.message || error?.message);
+      customToast.error(error?.response?.data?.detail || error?.message);
     }
   };
 
@@ -112,6 +118,8 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
       // You can also replace the above line with an API call to increment the count on the backend
     }
     setShowModal(true);
+    const productTracker = new ProductTracker();
+    productTracker.trackProductView(ipAddress, result.id.toString())
   };
 
   console.log('product view', productView)
@@ -132,11 +140,18 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
           <div className="flex flex-col gap-4">
             <div
               className="w-[10em] mx-auto"
-              style={{ maxHeight: "100%", minHeight: "220px" }}
+              style={{ maxHeight: "220px", minHeight: "220px" }}
             >
               <img
                 className="max-w-full"
                 src={result.imageUrl}
+                style={{
+                  width: "200px",       
+                  height: "200px",      
+                  display: "block",     
+                  margin: "0 auto",
+                  objectFit: "contain"
+                }}
                 alt="Picture of the author"
               />
             </div>

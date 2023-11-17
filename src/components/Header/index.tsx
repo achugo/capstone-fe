@@ -3,8 +3,13 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 
 const Header = () => {
-  const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
+  let token;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      token = localStorage.getItem("token");
+    }
+  }, []);
   const handleDropDown = (ev: any) => {
     const dropDown = document.getElementById("dropDownMenu");
     const menuStatus = ev.target.classList.contains("close");
@@ -31,11 +36,6 @@ const Header = () => {
         formDiv?.classList.replace("mt-24", "mt-0"));
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("token") as string);
-    }
-  }, []);
   return (
     <div className="sm:flex w-full justify-between py-4 px-2 md:px-10  sticky inset-0 z-[800] h-[73px]">
       <div className="flex justify-between">

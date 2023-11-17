@@ -5,6 +5,9 @@ import { FaArrowLeft } from "react-icons/fa";
 import { FaPlateWheat } from "react-icons/fa6";
 import axios from "axios";
 import customToast from "../Toast/customToast";
+import { dummyProducts } from "./dummy";
+import ProductDetailModal from "@/modal/ProductDetailModal";
+import RecipeInformationModal from "@/modal/RecipeInformationModal";
 
 interface UserInfo {
   first_name: string;
@@ -18,6 +21,8 @@ export default function UserDashboard() {
   const router = useRouter();
   const [basket, setBasket] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<any>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     fetchBasketItemsAndUserData();
@@ -87,8 +92,44 @@ export default function UserDashboard() {
     }
   };
 
+  const fetchRecipe = async (query: string) => {
+    try {
+      // Make a GET request to the basket endpoint
+      const response = await axios.get(
+        `https://api.spoonacular.com/recipes/complexSearch?query=${query}&maxFat=25&addRecipeInformation=true&number=5&apiKey=b2253a9cdd9a46d59767cad1897e1197&maxProtein=100&maxSugar=100`
+      );
+
+      // Assuming the API responds with the basket items
+      setLoading(false);
+      console.log("Recipe fetched successfully:", response.data);
+      setResult(response?.data?.results);
+      if (response?.data?.results?.length > 0) {
+        setShowModal(true)
+      }
+      // You can now set the fetched data to state or context to use in your app
+      // setBasketItems(response.data); // Example
+
+      customToast.success(
+        `Recipe for ${query} items fetched successfully.`
+      );
+    } catch (error: any) {
+      setLoading(false);
+      console.error("Failed to fetch recipe items:", error);
+      //@ts-ignore
+      customToast.error(
+        error?.response?.data?.message || "Failed to recipe basket items."
+      );
+    }
+  };
+
   return (
     <>
+      <RecipeInformationModal
+        results={result}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
+
       <div className="overflow-x-hidden flex">
         {/*sidebar */}
         <div className="bg-white min-h-[100vh] w-[13rem] ml-[-13rem] sm:ml-0 flex flex-col justify-between">
@@ -352,7 +393,7 @@ export default function UserDashboard() {
                 </tr>
               </thead>
               <tbody className="text-sm bg-white divide-y divide-gray-200">
-                {basket?.map((item: any) => (
+                {dummyProducts?.map((item: any) => (
                   <tr>
                     <td className="px-3 py-4">
                       <div className="flex items-center w-max">
@@ -360,20 +401,30 @@ export default function UserDashboard() {
                           width="50"
                           height="50"
                           className="w-10 h-10 rounded-full"
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlnK-pOokU4qJ2RYbjiSofutlnvcgoTxiFfw&usqp=CAU"
+                          src={item.imageUrl}
                           alt="avatar"
                         />
                       </div>
                     </td>
                     <td className="px-3 py-4">
                       <span className="px-4 py-1 text-sm text-green-500 rounded-full bg-green-50">
-                        {item?.name}
+                        {item?.title}
                       </span>
                     </td>
                     <td className="px-3 py-4 text-gray-500 ">
                       <a href="www.aldi.com/milk">{item?.description}</a>
                     </td>
-                    <td className="w-20 px-3 py-2 text-gray-500 ">12.99</td>
+                    <td className="w-20 px-3 py-2 text-gray-500 ">
+                      {item?.price}
+                    </td>
+                    <td className="w-20 px-3 py-2 text-gray-500 ">
+                      <button
+                        onClick={() => fetchRecipe(item?.eng)}
+                        className="bg-primary inline-block sm:mx-1.5 sm:mx-4 w-full sm:w-auto rounded p-3 my-0.5 sm:my-0 sm:px-4 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700"
+                      >
+                        Find Recipe
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
