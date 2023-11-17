@@ -158,8 +158,9 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
             <h3 className="text-lg font-semibold  text-black">
               {result.title}
             </h3>
-            <div className="h-fit">
-              <h4>{truncate(result.description, { length: 100 })} </h4>
+
+            <div className="h-[80px]">
+              <h4>{truncate(result.description, { length: 100 })}</h4>
             </div>
             <div className="flex justify-between  ">
               <div onClick={showModalHandler} className="cursor-pointer">
@@ -186,6 +187,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
             <div className="productViews mb-2">
               <h4>views {productView}</h4>
             </div>
+
           </div>
         </div>
       </div>

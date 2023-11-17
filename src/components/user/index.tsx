@@ -2,15 +2,22 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { FaPlateWheat } from "react-icons/fa6";
 import axios from "axios";
 import customToast from "../Toast/customToast";
 import { dummyProducts } from "./dummy";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import RecipeInformationModal from "@/modal/RecipeInformationModal";
 
+interface UserInfo {
+  first_name: string;
+  last_name: string;
+  email: string;
+  plates_count: number;
+}
+
 export default function UserDashboard() {
-  const [userInfo, setUserInfo] = useState<any>({});
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const router = useRouter();
   const [basket, setBasket] = useState<any>([]);
   const [loading, setLoading] = useState(false);
@@ -18,12 +25,7 @@ export default function UserDashboard() {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
-    // Perform localStorage action
-    const item = localStorage.getItem("userData");
-    if (item) {
-      setUserInfo(JSON.parse(item));
-    }
-    fetchBasketItems();
+    fetchBasketItemsAndUserData();
   }, []);
 
   const logout = () => {
@@ -36,7 +38,7 @@ export default function UserDashboard() {
     }, 1000);
   };
 
-  const fetchBasketItems = async () => {
+  const fetchBasketItemsAndUserData = async () => {
     setLoading(true);
 
     // Retrieve the token from local storage
@@ -54,15 +56,28 @@ export default function UserDashboard() {
 
     try {
       // Make a GET request to the basket endpoint
-      const response = await axios.get(
+      const basketPromise = axios.get(
         `https://api.grocery-guru.de/api/basket/`,
         { headers }
       );
 
+      const userInfoPromise = axios.get(
+        `https://api.grocery-guru.de/api/core/me/`,
+        {
+          headers,
+        }
+      );
+
+      const [basketResponse, userInfoResponse] = await Promise.all([
+        basketPromise,
+        userInfoPromise,
+      ]);
       // Assuming the API responds with the basket items
       setLoading(false);
-      console.log("Basket items fetched successfully:", response.data);
-      setBasket(response.data);
+      console.log("Basket items fetched successfully:", basketResponse.data);
+      setBasket(basketResponse.data);
+      setUserInfo(userInfoResponse.data);
+      // setNumberOfPlates(numberOfPlatesResponse.data.number_of_plates);
       // You can now set the fetched data to state or context to use in your app
       // setBasketItems(response.data); // Example
 
@@ -252,28 +267,34 @@ export default function UserDashboard() {
                 </button>
               </div>
             </div>
-            <div className="rounded-full bg-white w-auto flex justify-between p-1">
-              <p className="pt-2 ms-2 hidden lg:inline-block me-1">
-                Hello, {userInfo?.first_name}
-              </p>
-              <div className="w-10 h-10  bg-amber-300 rounded-full">
-                <button
-                  className="ps-1 pt-1"
-                  type="button"
-                  id="button-addon1"
-                  data-te-ripple-init
-                  data-te-ripple-color="light"
-                  // onClick={onSubmit}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="1em"
-                    viewBox="0 0 448 512"
-                    className="ms-2 mt-2"
+            <div className="flex justify-center items-center">
+              <div className="rounded-full bg-white w-auto flex  p-4 mr-2  items-center gap-2">
+                <p>{userInfo?.plates_count}</p>
+                <FaPlateWheat />
+              </div>
+              <div className="rounded-full bg-white w-auto flex justify-between p-1">
+                <p className="pt-2 ms-2 hidden lg:inline-block me-1">
+                  Hello, {userInfo?.first_name}
+                </p>
+                <div className="w-10 h-10  bg-amber-300 rounded-full">
+                  <button
+                    className="ps-1 pt-1"
+                    type="button"
+                    id="button-addon1"
+                    data-te-ripple-init
+                    data-te-ripple-color="light"
+                    // onClick={onSubmit}
                   >
-                    <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="1em"
+                      viewBox="0 0 448 512"
+                      className="ms-2 mt-2"
+                    >
+                      <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
