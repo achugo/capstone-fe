@@ -19,6 +19,12 @@ export default function Document() {
       <body className="h-screen">
         <Main />
         <NextScript />
+
+        <script src="service-worker-manager.js"></script>
+        <script>
+            const swManager = new ServiceWorkerManager();
+            swManager.registerServiceWorker();
+        </script>
       </body>
     </Html>
   );
