@@ -3,6 +3,8 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+      <link href="/manifest.json" rel="manifest" id="manifest" />
+        
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
