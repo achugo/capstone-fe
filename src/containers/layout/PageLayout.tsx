@@ -29,6 +29,7 @@ export default function PageLayout({ children }: Props) {
   const loginRegisterMainStyle = "flex min-h-screen flex-col items-center justify-start md:px-24 bg-black bg-opacity-50 h-screen";
   const userMainStyle = "bg-black bg-opacity-50 h-3/4";
   return (
+
     <div
       className={`${
         isLoginOrRegister
