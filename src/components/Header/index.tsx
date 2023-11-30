@@ -33,13 +33,13 @@ const Header = () => {
                   <span className="text-primary">GROCERY</span>GURU
                 </span>
               </div>
-              <div>
+            <div className="relative w-[90px]">
                 <svg
-                    className=" w-10 h-10 mx-1 sm:w-16 sm:h-16 text-primary  sm:hidden "
+                    className="w-10 h-10 mx-1 sm:w-16 sm:h-16 text-primary  sm:hidden"
                     viewBox="0 0 76 76"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                >
+                   >
                     <circle
                         cx="38"
                         cy="38"
@@ -60,6 +60,8 @@ const Header = () => {
                         fill="white"
                     />
                 </svg>
+                <p className="text-center  text-white sm:hidden text-xs
+          w-[30px] h-[30px] bg-green-500 rounded-full py-2 absolute right-[23px] top-[-4px]">100</p>
             </div>
               <div className="mt-1">
                   <svg
@@ -75,7 +77,7 @@ const Header = () => {
               </div>
 
         </div>
-      <div>
+      <div className="relative w-[100px]">
         <svg
           className=" w-10 h-10 mx-1 sm:w-16 sm:h-16 text-primary hidden sm:inline-block "
           viewBox="0 0 76 76"
@@ -102,6 +104,8 @@ const Header = () => {
             fill="white"
           />
         </svg>
+          <p className="text-center font-semibold text-white hidden sm:inline-block
+          w-[35px] h-[35px] bg-green-500 rounded-full py-2 absolute right-[5px]">100</p>
       </div>
       <div className="sm:flex justify-end absolute w-full left-0 sm:relative sm:w-auto opacity-0 sm:opacity-100
       top-[-400px] sm:top-0 "
