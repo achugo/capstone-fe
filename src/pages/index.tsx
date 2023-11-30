@@ -32,32 +32,29 @@ export default function Home() {
   const fetchMostViewedProducts = async () => {
     try {
       setLoading(true);
-      // console.log(
-      //   `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
-      // );
-      // const response = await fetch(
-      //   `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`,
-      //   {
-      //     method: "GET",
-      //     mode: "cors", // Set the mode to 'no-cors'
-      //     headers: {
-      //       "Content-Type": "application/json", // Your request headers here
-      //     },
-      //   }
-      // );
-      // let result = await response.json();
-
-      const result: SearchResultType[] = [
-
-      ]
+      const search = "tomato";
+      console.log(
+        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
+      );
+      const response = await fetch(
+        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`,
+        {
+          method: "GET",
+          mode: "cors", // Set the mode to 'no-cors'
+          headers: {
+            "Content-Type": "application/json", // Your request headers here
+          },
+        }
+      );
+      let result = await response.json();
       if (result) {
-        setSearchResults(result);
+        setMostViewedProducts(result);
         document.getElementById("search-container")?.scrollIntoView({
           behavior: "smooth",
         });
       }
     } catch (error) {
-      customToast.error("Couldn't get any results");
+      customToast.error("Couldn't get most viewed products");
       console.log("error", error);
     } finally {
       setLoading(false);
@@ -84,9 +81,12 @@ export default function Home() {
 
       if (result) {
         setSearchResults(result);
-        document.getElementById("search-container")?.scrollIntoView({
-          behavior: "smooth",
-        });
+
+        setTimeout(() => {
+          document.getElementById("search-container")?.scrollIntoView({
+            behavior: "smooth",
+          });
+        }, 1000)
       }
     } catch (error) {
       customToast.error("Couldn't get any results");
@@ -130,7 +130,7 @@ export default function Home() {
             </div>
           )}
           {searchResults.length === 0 && <>
-            <MostViewedProducts />
+            <MostViewedProducts results={mostViewedProducts} />
           </>}
           {searchResults.length > 0 && (
             <>
