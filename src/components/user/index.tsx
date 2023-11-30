@@ -8,6 +8,8 @@ import customToast from "../Toast/customToast";
 import { dummyProducts } from "./dummy";
 import ProductDetailModal from "@/modal/ProductDetailModal";
 import RecipeInformationModal from "@/modal/RecipeInformationModal";
+import Loader from "../loader/Loader";
+import Loading from "react-loading";
 
 interface UserInfo {
   first_name: string;
@@ -21,6 +23,8 @@ export default function UserDashboard() {
   const router = useRouter();
   const [basket, setBasket] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingBasket, setLoadingBasket] = useState(true);
+  const [selection, setSelection] = useState("");
   const [result, setResult] = useState<any>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -39,14 +43,15 @@ export default function UserDashboard() {
   };
 
   const fetchBasketItemsAndUserData = async () => {
-    setLoading(true);
+    setLoadingBasket(true);
 
     // Retrieve the token from local storage
     const token = localStorage.getItem("token");
 
     if (!token) {
       customToast.error("No authentication token found. Please log in.");
-      setLoading(false);
+      router.push("/login");
+      setLoadingBasket(false);
       return;
     }
 
@@ -72,8 +77,9 @@ export default function UserDashboard() {
         basketPromise,
         userInfoPromise,
       ]);
+
       // Assuming the API responds with the basket items
-      setLoading(false);
+      setLoadingBasket(false);
       console.log("Basket items fetched successfully:", basketResponse.data);
       setBasket(basketResponse.data);
       setUserInfo(userInfoResponse.data);
@@ -83,7 +89,12 @@ export default function UserDashboard() {
 
       customToast.success("Basket items fetched successfully.");
     } catch (error: any) {
-      setLoading(false);
+      setLoadingBasket(false);
+      if (error?.response.status === 401) {
+        customToast.error("Invalid token");
+        router.push("/login");
+        return;
+      }
       console.error("Failed to fetch basket items:", error);
       //@ts-ignore
       customToast.error(
@@ -93,6 +104,8 @@ export default function UserDashboard() {
   };
 
   const fetchRecipe = async (query: string) => {
+    setLoading(true);
+    setSelection(query);
     try {
       // Make a GET request to the basket endpoint
       const response = await axios.get(
@@ -104,14 +117,14 @@ export default function UserDashboard() {
       console.log("Recipe fetched successfully:", response.data);
       setResult(response?.data?.results);
       if (response?.data?.results?.length > 0) {
-        setShowModal(true)
+        setShowModal(true);
+
+        customToast.success(`Recipe for ${query} items fetched successfully.`);
+      } else {
+        customToast.warn(`No recipe for ${query} found`);
       }
       // You can now set the fetched data to state or context to use in your app
       // setBasketItems(response.data); // Example
-
-      customToast.success(
-        `Recipe for ${query} items fetched successfully.`
-      );
     } catch (error: any) {
       setLoading(false);
       console.error("Failed to fetch recipe items:", error);
@@ -121,6 +134,8 @@ export default function UserDashboard() {
       );
     }
   };
+
+  console.log("basket", basket);
 
   return (
     <>
@@ -314,7 +329,7 @@ export default function UserDashboard() {
                   DISCOUNTS
                 </span>
               </div>
-              <h2 className="text-center font-bold text-xl">100</h2>
+              <h2 className="text-center font-bold text-xl"></h2>
             </div>
             <div className=" w-[160px] rounded-xl bg-amber-400 shadow my-1">
               <div className="flex text-center pt-2  ps-2  hover:cursor-pointer duration-500">
@@ -393,7 +408,7 @@ export default function UserDashboard() {
                 </tr>
               </thead>
               <tbody className="text-sm bg-white divide-y divide-gray-200">
-                {dummyProducts?.map((item: any) => (
+                {basket?.map((item: any) => (
                   <tr>
                     <td className="px-3 py-4">
                       <div className="flex items-center w-max">
@@ -419,14 +434,26 @@ export default function UserDashboard() {
                     </td>
                     <td className="w-20 px-3 py-2 text-gray-500 ">
                       <button
-                        onClick={() => fetchRecipe(item?.eng)}
+                        onClick={() => fetchRecipe(item?.title)}
                         className="bg-primary inline-block sm:mx-1.5 sm:mx-4 w-full sm:w-auto rounded p-3 my-0.5 sm:my-0 sm:px-4 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700"
                       >
-                        Find Recipe
+                        {loading && selection === item?.title ? (
+                          <Loader height={20} width={20} />
+                        ) : (
+                          "Find Recipe"
+                        )}
                       </button>
                     </td>
                   </tr>
                 ))}
+                {loadingBasket && (
+                  <>
+                    <div className="flex justify-center">
+                      <Loader color="orange" />
+                    </div>
+                    <div />
+                  </>
+                )}
               </tbody>
             </table>
           </div>
