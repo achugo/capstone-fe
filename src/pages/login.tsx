@@ -7,9 +7,10 @@ import { toast } from "react-toastify";
 import Loader from "@/components/loader/Loader";
 import { API_BASE_URL } from "@/constants";
 import customToast from "@/components/Toast/customToast";
+import GoogleAuthButton from "@/components/GoogleAuth/GoogleAuthButton";
 type Props = {};
 
-const Login = ({}: Props) => {
+const Login = ({ }: Props) => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +74,7 @@ const Login = ({}: Props) => {
                     Please login to access customized search experience
                   </p>
                 </div>
+
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="relative mb-6" data-te-input-wrapper-init>
@@ -133,6 +135,9 @@ const Login = ({}: Props) => {
                   <p className="mx-4 mb-0 text-center font-semibold dark:text-neutral-200">
                     OR
                   </p>
+                </div>
+                <div className="w-full">
+                  <GoogleAuthButton />
                 </div>
               </form>
             </div>
