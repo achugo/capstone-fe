@@ -12,6 +12,7 @@ import SearchResults from "@/components/results/SearchResult";
 import Product from "@/components/Product";
 import { responseData } from "../mocks/res";
 import customToast from "@/components/Toast/customToast";
+import MostViewedProducts from "@/components/results/MostViewedProducts";
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
@@ -21,6 +22,48 @@ export default function Home() {
   const [size, setSize] = useState<Number>(10);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [mostViewedProducts, setMostViewedProducts] = useState<SearchResultType[]>([]);
+
+  useEffect(() => {
+    fetchMostViewedProducts();
+  }, []);
+
+
+  const fetchMostViewedProducts = async () => {
+    try {
+      setLoading(true);
+      // console.log(
+      //   `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
+      // );
+      // const response = await fetch(
+      //   `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`,
+      //   {
+      //     method: "GET",
+      //     mode: "cors", // Set the mode to 'no-cors'
+      //     headers: {
+      //       "Content-Type": "application/json", // Your request headers here
+      //     },
+      //   }
+      // );
+      // let result = await response.json();
+
+      const result: SearchResultType[] = [
+
+      ]
+      if (result) {
+        setSearchResults(result);
+        document.getElementById("search-container")?.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+    } catch (error) {
+      customToast.error("Couldn't get any results");
+      console.log("error", error);
+    } finally {
+      setLoading(false);
+    }
+
+  };
   const fetchResults = async () => {
     try {
       setLoading(true);
@@ -86,6 +129,9 @@ export default function Home() {
               <ReactLoading type={"spin"} color="#ecc229" />
             </div>
           )}
+          {searchResults.length === 0 && <>
+            <MostViewedProducts />
+          </>}
           {searchResults.length > 0 && (
             <>
               <SearchResults results={searchResults} search={currentSearch} />
