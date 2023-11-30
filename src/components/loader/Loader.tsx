@@ -1,16 +1,18 @@
 import React from "react";
 import { Oval } from "react-loader-spinner";
 
-type spinnerProps = {
-  loading: boolean;
+type SpinnerProps = {
+  color?: string;
+  height?: number;
+  width?: number;
 };
 
-const Loader = () => {
+const Loader: React.FC<SpinnerProps> = ({ color = "#f3f7f3", height= 40, width= 40 }) => {
   return (
     <Oval
-      height={40}
-      width={40}
-      color="#f3f7f3"
+      height={height}
+      width={width}
+      color={color}
       wrapperStyle={{}}
       wrapperClass=""
       visible={true}
