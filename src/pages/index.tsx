@@ -13,14 +13,15 @@ import Product from "@/components/Product";
 import { responseData } from "../mocks/res";
 import customToast from "@/components/Toast/customToast";
 import MostViewedProducts from "@/components/results/MostViewedProducts";
+import Loader from "@/components/loader/Loader";
 
 const commonSearches = ["tomato", "ketchup", "wasser"];
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const [search, setSearch] = useState<string>("");
   const [currentSearch, setCurrentSearch] = useState<string>("");
-  const [page, setPage] = useState<Number>(0);
-  const [size, setSize] = useState<Number>(10);
+  const [page, setPage] = useState<number>(0);
+  const [size, setSize] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [mostViewedProducts, setMostViewedProducts] = useState<SearchResultType[]>([]);
@@ -59,14 +60,20 @@ export default function Home() {
     }
 
   };
-  const fetchResults = async () => {
+  useEffect(() => {
+    if (page !== 0) {
+      fetchResults();
+    }
+  }, [page]);
+
+  const fetchResults = async (newSearch?: boolean) => {
     try {
       setLoading(true);
       console.log(
         `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
       );
       const response = await fetch(
-        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`,
+        `${API_BASE_URL}items?name=${search}&page=${page}`,
         {
           method: "GET",
           mode: "cors", // Set the mode to 'no-cors'
@@ -78,13 +85,15 @@ export default function Home() {
       let result = await response.json();
 
       if (result) {
-        setSearchResults(result);
-
-        setTimeout(() => {
+        if (newSearch)
           document.getElementById("search-container")?.scrollIntoView({
             behavior: "smooth",
           });
-        }, 1000)
+        if (newSearch) {
+          setSearchResults(result);
+        } else {
+          setSearchResults(searchResults.concat(result));
+        }
       }
     } catch (error) {
       customToast.error("Couldn't get any results");
@@ -97,7 +106,7 @@ export default function Home() {
   const submitSearchQuery = (e: any) => {
     e.preventDefault();
     if (search.length >= 2) {
-      fetchResults();
+      fetchResults(true);
     }
     setCurrentSearch(search);
   };
@@ -127,13 +136,24 @@ export default function Home() {
               <ReactLoading type={"spin"} color="#ecc229" />
             </div>
           )}
-          {searchResults.length === 0 && <>
+          {searchResults.length === 0 && !currentSearch && <>
             <MostViewedProducts results={mostViewedProducts} search={commonSearches[new Date().getDay() % commonSearches.length]} />
           </>}
           {searchResults.length > 0 && (
             <>
               <SearchResults results={searchResults} search={currentSearch} />
             </>
+          )}
+
+          {searchResults?.length >= 10 && (
+            <div className="text-center pb-24">
+              <button
+                onClick={() => setPage(page + 1)}
+                className="bg-primary inline-block sm:mx-1.5 sm:mx-4 w-full sm:w-auto rounded p-3 my-0.5 sm:my-0 sm:px-4 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700"
+              >
+                Find More
+              </button>
+            </div>
           )}
 
           {searchResults.length === 0 && currentSearch && (
@@ -143,6 +163,6 @@ export default function Home() {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 }
