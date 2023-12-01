@@ -85,6 +85,7 @@ export default function Home() {
       let result = await response.json();
 
       if (result) {
+        setMostViewedProducts([]);
         if (newSearch)
           document.getElementById("search-container")?.scrollIntoView({
             behavior: "smooth",
@@ -136,7 +137,7 @@ export default function Home() {
               <ReactLoading type={"spin"} color="#ecc229" />
             </div>
           )}
-          {searchResults.length === 0 && !currentSearch && <>
+          {searchResults.length === 0 && !currentSearch && mostViewedProducts.length > 0 && <>
             <MostViewedProducts results={mostViewedProducts} search={commonSearches[new Date().getDay() % commonSearches.length]} />
           </>}
           {searchResults.length > 0 && (
