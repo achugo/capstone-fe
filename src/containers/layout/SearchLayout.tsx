@@ -8,7 +8,7 @@ type Props = {
 export default function SearchLayout({ children }: Props) {
   const router = useRouter();
 
-  const userMainStyle = "bg-black bg-opacity-50 h-full";
+  const userMainStyle = "bg-black bg-opacity-50 h-full ";
   return (
     <div
       style={{ minHeight: "35em", height: "100vh" }}

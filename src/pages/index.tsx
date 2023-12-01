@@ -12,8 +12,10 @@ import SearchResults from "@/components/results/SearchResult";
 import Product from "@/components/Product";
 import { responseData } from "../mocks/res";
 import customToast from "@/components/Toast/customToast";
+import MostViewedProducts from "@/components/results/MostViewedProducts";
 import Loader from "@/components/loader/Loader";
 
+const commonSearches = ["tomato", "ketchup", "wasser"];
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -22,13 +24,49 @@ export default function Home() {
   const [size, setSize] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [mostViewedProducts, setMostViewedProducts] = useState<SearchResultType[]>([]);
+
+  useEffect(() => {
+    fetchMostViewedProducts();
+  }, []);
+
+
+  const fetchMostViewedProducts = async () => {
+    try {
+      setLoading(true);
+      const search = commonSearches[new Date().getDay() % commonSearches.length];
+      console.log(
+        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
+      );
+      const response = await fetch(
+        `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`,
+        {
+          method: "GET",
+          mode: "cors", // Set the mode to 'no-cors'
+          headers: {
+            "Content-Type": "application/json", // Your request headers here
+          },
+        }
+      );
+      let result = await response.json();
+      if (result) {
+        setMostViewedProducts(result);
+      }
+    } catch (error) {
+      customToast.error("Couldn't get most viewed products");
+      console.log("error", error);
+    } finally {
+      setLoading(false);
+    }
+
+  };
   useEffect(() => {
     if (page !== 0) {
       fetchResults();
     }
   }, [page]);
 
-  const fetchResults = async () => {
+  const fetchResults = async (newSearch?: boolean) => {
     try {
       setLoading(true);
       console.log(
@@ -47,12 +85,15 @@ export default function Home() {
       let result = await response.json();
 
       if (result) {
-        setSearchResults(searchResults.concat(result));
-      }
-      if (result?.length === 10) {
-        document.getElementById("search-container")?.scrollIntoView({
-          behavior: "smooth",
-        });
+        if (newSearch)
+          document.getElementById("search-container")?.scrollIntoView({
+            behavior: "smooth",
+          });
+        if (newSearch) {
+          setSearchResults(result);
+        } else {
+          setSearchResults(searchResults.concat(result));
+        }
       }
     } catch (error) {
       customToast.error("Couldn't get any results");
@@ -65,7 +106,7 @@ export default function Home() {
   const submitSearchQuery = (e: any) => {
     e.preventDefault();
     if (search.length >= 2) {
-      fetchResults();
+      fetchResults(true);
     }
     setCurrentSearch(search);
   };
@@ -95,6 +136,9 @@ export default function Home() {
               <ReactLoading type={"spin"} color="#ecc229" />
             </div>
           )}
+          {searchResults.length === 0 && !currentSearch && <>
+            <MostViewedProducts results={mostViewedProducts} search={commonSearches[new Date().getDay() % commonSearches.length]} />
+          </>}
           {searchResults.length > 0 && (
             <>
               <SearchResults results={searchResults} search={currentSearch} />
@@ -119,6 +163,6 @@ export default function Home() {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 }
