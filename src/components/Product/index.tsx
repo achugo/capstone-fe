@@ -5,13 +5,13 @@ import ProductDetailModal from "@/modal/ProductDetailModal";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { FaBeer } from "react-icons/fa";
-import {BsEyeFill, BsFillHeartFill, BsHeart} from "react-icons/bs";
+import { BsEyeFill, BsFillHeartFill, BsHeart } from "react-icons/bs";
 import axios from "axios";
 import customToast from "../Toast/customToast";
 import { ProductTracker } from "@/product_views_tracker/productTracker";
 
 interface SearchResultProps {
-    result: SearchResultType;
+  result: SearchResultType;
 }
 
 const Product: React.FC<SearchResultProps> = ({ result }) => {
@@ -124,19 +124,20 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
 
   console.log('product view', productView)
 
-    return (
-        <>
-            <ProductDetailModal
-                result={result}
-                showModal={showModal}
-                setShowModal={setShowModal}
-            />
+  return (
+    <>
+      <ProductDetailModal
+        result={result}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
 
       <div
         className="p-4 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 cursor-pointer"
         style={{ minWidth: "350px" }}
       >
-        <div className="bg-white shadow-md rounded p-6 cursor-auto  h-fit hover:scale-110 hover:transition-transform h-[30em]">
+        <div className="bg-white shadow-md rounded p-6 cursor-auto  h-fit hover:scale-110 hover:transition-transform h-[30em] hover:cursor-pointer"
+          onClick={showModalHandler}>
           <div className="flex flex-col gap-4">
             <div
               className="w-[10em] mx-auto"
@@ -146,9 +147,9 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
                 className="max-w-full"
                 src={result.imageUrl}
                 style={{
-                  width: "200px",       
-                  height: "200px",      
-                  display: "block",     
+                  width: "200px",
+                  height: "200px",
+                  display: "block",
                   margin: "0 auto",
                   objectFit: "contain"
                 }}
@@ -163,7 +164,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
               <h4>{truncate(result.description, { length: 100 })}</h4>
             </div>
             <div className="flex justify-between  ">
-              <div onClick={showModalHandler} className="cursor-pointer">
+              <div className="cursor-pointer">
                 <p className="bold text-orange-700">Shop: {result.shop}</p>
                 <h1 className="w-[150px] text-2xl font-bold text-[#fe7d00]">
                   € {result.price}
@@ -185,7 +186,7 @@ const Product: React.FC<SearchResultProps> = ({ result }) => {
               </div>
             </div>{" "}
             <div className="productViews mb-2 w-full flex flex-row">
-              <BsEyeFill className="text-yellow-400 text-2xl"/>
+              <BsEyeFill className="text-yellow-400 text-2xl" />
               <h4 className="">&nbsp; {productView}</h4>
             </div>
 
