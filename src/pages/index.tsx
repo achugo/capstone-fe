@@ -14,6 +14,7 @@ import { responseData } from "../mocks/res";
 import customToast from "@/components/Toast/customToast";
 import MostViewedProducts from "@/components/results/MostViewedProducts";
 
+const commonSearches = ["tomato", "ketchup", "wasser"];
 export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -32,7 +33,7 @@ export default function Home() {
   const fetchMostViewedProducts = async () => {
     try {
       setLoading(true);
-      const search = "tomato";
+      const search = commonSearches[new Date().getDay() % commonSearches.length];
       console.log(
         `${API_BASE_URL}items?name=${search}&page=${page}&size=${size}`
       );
@@ -49,9 +50,6 @@ export default function Home() {
       let result = await response.json();
       if (result) {
         setMostViewedProducts(result);
-        document.getElementById("search-container")?.scrollIntoView({
-          behavior: "smooth",
-        });
       }
     } catch (error) {
       customToast.error("Couldn't get most viewed products");
@@ -130,7 +128,7 @@ export default function Home() {
             </div>
           )}
           {searchResults.length === 0 && <>
-            <MostViewedProducts results={mostViewedProducts} />
+            <MostViewedProducts results={mostViewedProducts} search={commonSearches[new Date().getDay() % commonSearches.length]} />
           </>}
           {searchResults.length > 0 && (
             <>
